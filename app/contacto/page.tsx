@@ -4,13 +4,13 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: "Escríbenos para pedidos al por mayor de perfumes equivalencia en Colombia.",
+  description: "Escríbenos para comprar perfumes equivalencia al por mayor y al detal en Colombia. Los mejores precios.",
 };
 
 export default async function ContactPage() {
   const settings = await getSettings();
   const href = settings.whatsapp
-    ? waLink(settings.whatsapp, "Hola! Quiero información sobre los perfumes al por mayor.")
+    ? waLink(settings.whatsapp, "Hola! Quiero información. Vi que tienen los mejores precios, al por mayor y al detal.")
     : "";
 
   return (
@@ -19,8 +19,8 @@ export default async function ContactPage() {
         <p className="text-xs tracking-[0.22em] text-[#d4af37] uppercase">Nosotros</p>
         <h1 className="mt-3 font-serif text-5xl md:text-6xl">Contacto</h1>
         <p className="mt-4 max-w-md text-sm leading-7 text-[#f6f1e7]/75">
-          Aura & Essentia vende y revende perfumes equivalencia calidad 1.1. El pedido se confirma por
-          WhatsApp, igual que en el catálogo que ya compartes.
+          Aura & Essentia vende perfumes equivalencia calidad 1.1 al por mayor y al detal, con los mejores
+          precios. El pedido se confirma por WhatsApp.
         </p>
         <dl className="mt-8 space-y-4 text-sm">
           {settings.correo ? (

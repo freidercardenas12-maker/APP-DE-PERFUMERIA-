@@ -53,7 +53,9 @@ export function CartView({ products, settings }: { products: Producto[]; setting
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <h1 className="font-serif text-4xl md:text-6xl">Tu pedido</h1>
-      <p className="mt-2 text-sm text-[#f6f1e7]/65">Arma la lista y envíala por WhatsApp. Así se cierra la venta.</p>
+      <p className="mt-2 text-sm text-[#f6f1e7]/65">
+        Precios mayoristas y al detal. Arma la lista y envíala por WhatsApp.
+      </p>
 
       {!ready ? <p className="mt-8 text-sm text-[#e8d5a3]">Cargando pedido…</p> : null}
 
@@ -215,7 +217,7 @@ export function CartView({ products, settings }: { products: Producto[]; setting
               <section className="border border-[rgba(212,175,55,0.35)] bg-[#120e09] p-5 md:col-span-3 md:p-6">
                 <p className="text-xs tracking-[0.22em] text-[#d4af37] uppercase">Así llega a WhatsApp</p>
                 <h2 className="mt-3 font-serif text-3xl leading-none">Aura & Essentia</h2>
-                <p className="mt-1 text-sm tracking-[0.12em] text-[#f6f1e7]/60 uppercase">Pedido al por mayor</p>
+                <p className="mt-1 text-sm tracking-[0.12em] text-[#f6f1e7]/60 uppercase">Mayorista y al detal</p>
                 <p className="mt-5 text-xs tracking-[0.16em] text-[#e8d5a3] uppercase">Referencias solicitadas</p>
                 <ol className="mt-3 space-y-4">
                   {comprables.map((row, index) => (
@@ -236,7 +238,9 @@ export function CartView({ products, settings }: { products: Producto[]; setting
                 <p className="mt-5 border-t border-[rgba(212,175,55,0.35)] pt-4 font-serif text-2xl text-[#e8d5a3]">
                   Total del pedido: {formatCOP(total)}
                 </p>
-                <p className="mt-1 text-sm text-[#f6f1e7]/60">Precios mayoristas. El envío se confirma por este chat.</p>
+                <p className="mt-1 text-sm text-[#f6f1e7]/60">
+                  Los mejores precios, al por mayor y al detal. El envío se confirma por este chat.
+                </p>
                 <div className="mt-4 text-sm leading-6">
                   <p className="text-xs tracking-[0.16em] text-[#e8d5a3] uppercase">Datos del cliente</p>
                   <p className="mt-2">Nombre: {cliente.nombre.trim() || "—"}</p>

@@ -44,7 +44,8 @@ export function ProductDetail({ product, related }: { product: Producto; related
             Aroma equivalente. Fragancia inspirada, no es el producto original de la marca.
           </p>
           <div className="mt-6">
-            <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista</p>
+            <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista y al detal</p>
+            <p className="mt-1 text-xs tracking-[0.16em] text-[#d4af37] uppercase">Los mejores precios</p>
             {promo ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
             <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(vigente)}</p>
           </div>

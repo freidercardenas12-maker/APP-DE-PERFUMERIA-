@@ -17,9 +17,9 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-[1.15fr_0.85fr] md:py-20">
           <div className="order-2 md:order-1">
             <p className="inline-block max-w-full border-2 border-[#d4af37] px-4 py-3 font-serif text-3xl leading-tight tracking-[0.04em] text-[#f3e0a8] uppercase md:px-6 md:py-4 md:text-5xl">
-              Precios mayoristas
+              Precios mayoristas y al detal
             </p>
-            <p className="mt-3 text-sm tracking-[0.22em] text-[#d4af37] uppercase">Calidad 1.1</p>
+            <p className="mt-3 text-sm tracking-[0.22em] text-[#d4af37] uppercase">Los mejores precios · Calidad 1.1</p>
             {settings.promoActiva ? (
               <p className="mt-6 inline-block border border-[#d4af37] px-3 py-1 text-xs tracking-[0.22em] text-[#e8d5a3] uppercase">
                 {settings.promoTexto}
@@ -32,7 +32,7 @@ export default async function HomePage() {
               <p className="mt-4 max-w-lg font-serif text-2xl leading-snug text-[#e8d5a3]">{settings.promoSubtitulo}</p>
             ) : null}
             <p className="mt-6 max-w-lg text-base leading-7 text-[#f6f1e7]/75">
-              Dama, caballero y árabe / nicho. Busca por nombre o nota, suma cantidades y el total sale listo en el mensaje.
+              Al por mayor y al detal, con los mejores precios. Dama, caballero y árabe / nicho. Busca por nombre o nota, suma cantidades y el total sale listo en el mensaje.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/catalogo/dama" className="btn-gold">

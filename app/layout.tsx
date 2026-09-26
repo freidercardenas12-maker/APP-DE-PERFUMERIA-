@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Aura & Essentia",
   },
   description:
-    "Aura & Essentia. Perfumes equivalencia calidad 1.1 al por mayor en Colombia. Catálogo de dama, caballero y árabe, con pedido por WhatsApp.",
+    "Aura & Essentia. Perfumes equivalencia calidad 1.1 al por mayor y al detal en Colombia. Los mejores precios. Catálogo de dama, caballero y árabe, con pedido por WhatsApp.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

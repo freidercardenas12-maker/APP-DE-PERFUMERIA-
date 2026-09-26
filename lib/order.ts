@@ -22,13 +22,13 @@ export function mensajePedido(
 
   return [
     "*AURA & ESSENTIA*",
-    "Pedido al por mayor",
+    "Pedido al por mayor y al detal",
     "",
     "*Referencias solicitadas*",
     referencias.join("\n\n"),
     "",
     `*Total del pedido: ${formatCOP(total)}*`,
-    "Precios mayoristas. El envío se confirma por este chat.",
+    "Los mejores precios, al por mayor y al detal. El envío se confirma por este chat.",
     "",
     "*Datos del cliente*",
     `Nombre: ${cliente.nombre.trim()}`,

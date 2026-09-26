@@ -51,6 +51,7 @@ export function ProductCard({ product }: { product: Producto }) {
         <div>
           {promo ? <p className="text-xs text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
           <p className="text-lg text-[#e8d5a3]">{formatCOP(vigente)}</p>
+          <p className="text-[0.65rem] tracking-[0.12em] text-[#d4af37] uppercase">Mayorista y al detal</p>
         </div>
         <button
           type="button"

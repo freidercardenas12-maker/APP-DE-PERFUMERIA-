@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Context): Promise<Metadata> {
   if (!product) return { title: "Producto" };
   return {
     title: product.nombre,
-    description: `${product.nombre}, ${formatTalla(product.talla_ml)}, precio mayorista ${formatCOP(precioVigente(product))}. Aroma equivalente.`,
+    description: `${product.nombre}, ${formatTalla(product.talla_ml)}, precio mayorista y al detal ${formatCOP(precioVigente(product))}. Los mejores precios. Aroma equivalente.`,
   };
 }
 

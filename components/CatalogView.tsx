@@ -91,6 +91,9 @@ export function CatalogView({
           </p>
           <h1 className="font-serif text-4xl md:text-6xl">{meta.headline}</h1>
           <p className="mt-2 max-w-xl text-sm leading-6 text-[#f6f1e7]/70">{meta.description}</p>
+          <p className="mt-2 text-sm tracking-[0.12em] text-[#d4af37] uppercase">
+            Mayorista y al detal · Los mejores precios
+          </p>
         </div>
         <p className="text-sm text-[#e8d5a3]">
           {filtered.length} {filtered.length === 1 ? "referencia" : "referencias"}

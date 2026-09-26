@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function Footer({ settings }: { settings: Ajustes }) {
   const whatsapp = settings.whatsapp
-    ? waLink(settings.whatsapp, "Hola! Quiero información sobre los perfumes al por mayor.")
+    ? waLink(settings.whatsapp, "Hola! Quiero información. Vi que tienen los mejores precios, al por mayor y al detal.")
     : "";
 
   return (
@@ -14,7 +14,7 @@ export function Footer({ settings }: { settings: Ajustes }) {
         <div>
           <Logo />
           <p className="mt-4 max-w-xs text-sm leading-6 text-[#f6f1e7]/70">
-            Perfumes equivalencia calidad 1.1 al por mayor. Dama, caballero y árabe / nicho.
+            Perfumes equivalencia calidad 1.1, al por mayor y al detal. Los mejores precios. Dama, caballero y árabe / nicho.
           </p>
         </div>
         <div className="text-sm leading-7 text-[#f6f1e7]/75">

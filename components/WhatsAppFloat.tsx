@@ -2,7 +2,7 @@ import { waLink } from "@/lib/format";
 
 export function WhatsAppFloat({ phone }: { phone: string }) {
   if (!phone) return null;
-  const href = waLink(phone, "Hola! Quiero información sobre los perfumes al por mayor.");
+  const href = waLink(phone, "Hola! Quiero información. Vi que tienen los mejores precios, al por mayor y al detal.");
   return (
     <a
       href={href}
