@@ -1,0 +1,14 @@
+name: Mantener tienda despierta
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Avisar a Render
+        run: curl -fsS --retry 2 --retry-all-errors --retry-delay 5 --max-time 90 "https://app-de-perfumeria.onrender.com/api/ping"
