@@ -1,8 +1,10 @@
 "use client";
 
 import { ProductGrid } from "@/components/ProductGrid";
+import { SearchSuggest } from "@/components/SearchSuggest";
 import { CATEGORY_META } from "@/lib/categories";
 import { formatCOP } from "@/lib/format";
+import { buscarPerfumes } from "@/lib/search";
 import type { Categoria, Producto, Subcategoria } from "@/lib/types";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -12,9 +14,11 @@ const PAGE_SIZE = 24;
 export function CatalogView({
   categoria,
   products,
+  catalogo,
 }: {
   categoria: Categoria;
   products: Producto[];
+  catalogo: Producto[];
 }) {
   const meta = CATEGORY_META[categoria];
   const prices = products.map((product) => product.precio);
@@ -52,9 +56,10 @@ export function CatalogView({
   }
 
   const filtered = useMemo(() => {
-    const text = query.trim().toLowerCase();
+    const text = query.trim();
+    const matched = text ? new Set(buscarPerfumes(products, text).map((product) => product.id)) : null;
     const list = products.filter((product) => {
-      if (text && !product.nombre.toLowerCase().includes(text)) return false;
+      if (matched && !matched.has(product.id)) return false;
       if (note && !product.notas.includes(note)) return false;
       if (sub && product.subcategoria !== sub) return false;
       if (soloDisponibles && !product.disponible) return false;
@@ -76,6 +81,12 @@ export function CatalogView({
   }
 
   const shown = filtered.slice(0, visible);
+  const otras = query.trim()
+    ? buscarPerfumes(
+        catalogo.filter((product) => product.categoria !== categoria),
+        query,
+      ).slice(0, 8)
+    : [];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -111,16 +122,17 @@ export function CatalogView({
         ) : null}
       </div>
 
+      <div className="mt-6 max-w-xl">
+        <SearchSuggest
+          catalogo={catalogo}
+          value={query}
+          onChange={(next) => updateFilter(setQuery, next)}
+          inputClassName="field w-full"
+          placeholder="Escribe cualquier letra. Busca en las tres líneas."
+        />
+      </div>
+
       <div className={`${filtersOpen ? "grid" : "hidden"} mt-4 gap-3 border border-[rgba(212,175,55,0.2)] p-4 md:mt-8 md:grid md:grid-cols-2 xl:grid-cols-4`}>
-        <label className="block text-xs tracking-[0.14em] text-[#e8d5a3] uppercase">
-          Buscar
-          <input
-            value={query}
-            onChange={(event) => updateFilter(setQuery, event.target.value)}
-            className="field mt-2"
-            placeholder="Nombre del perfume"
-          />
-        </label>
         <label className="block text-xs tracking-[0.14em] text-[#e8d5a3] uppercase">
           Ordenar
           <select value={sort} onChange={(event) => updateFilter(setSort, event.target.value)} className="field mt-2">
@@ -206,7 +218,15 @@ export function CatalogView({
       </div>
 
       <div className="mt-8">
-        <ProductGrid products={shown} />
+        {shown.length === 0 && query.trim() ? (
+          <p className="border border-dashed border-[rgba(212,175,55,0.35)] px-6 py-10 text-center text-[#f6f1e7]/70">
+            {otras.length > 0
+              ? `En ${meta.label.toLowerCase()} no está. Abajo aparecen las líneas donde sí coincide.`
+              : "No hay una referencia con esas letras."}
+          </p>
+        ) : (
+          <ProductGrid products={shown} />
+        )}
       </div>
       {visible < filtered.length ? (
         <div className="mt-8 text-center">
@@ -214,6 +234,17 @@ export function CatalogView({
             Cargar más
           </button>
         </div>
+      ) : null}
+      {otras.length > 0 ? (
+        <section className="mt-12">
+          <h2 className="font-serif text-3xl">También está en otras líneas</h2>
+          <p className="mt-2 text-sm text-[#f6f1e7]/70">
+            La referencia no se queda solo en {meta.label.toLowerCase()}. Estas coinciden con lo que escribiste.
+          </p>
+          <div className="mt-6">
+            <ProductGrid products={otras} />
+          </div>
+        </section>
       ) : null}
     </div>
   );

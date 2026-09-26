@@ -1,7 +1,9 @@
 "use client";
 
 import { Logo } from "@/components/Logo";
+import { SearchSuggest } from "@/components/SearchSuggest";
 import { useCart } from "@/components/CartProvider";
+import type { Buscable } from "@/lib/search";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -14,7 +16,7 @@ const LINKS = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-export function Header() {
+export function Header({ catalogo }: { catalogo: Buscable[] }) {
   const pathname = usePathname();
   const { count, ready } = useCart();
   const [open, setOpen] = useState(false);
@@ -54,17 +56,9 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <form action="/buscar" className="hidden min-w-0 flex-1 items-center gap-2 md:flex lg:max-w-sm lg:flex-none">
-          <input
-            name="q"
-            placeholder="Buscar perfume"
-            aria-label="Buscar perfume"
-            className="field min-w-0 flex-1 py-2 text-sm"
-          />
-          <button type="submit" className="btn-ghost shrink-0 px-3 py-2 text-xs">
-            Buscar
-          </button>
-        </form>
+        <div className="hidden min-w-0 flex-1 md:block lg:max-w-sm lg:flex-none">
+          <SearchSuggest catalogo={catalogo} inputClassName="field w-full py-2 text-sm" />
+        </div>
         <Link
           href="/carrito"
           prefetch={false}
@@ -90,14 +84,11 @@ export function Header() {
           Menú
         </button>
       </div>
+      <div className="px-4 pb-3 md:hidden">
+        <SearchSuggest catalogo={catalogo} inputClassName="field w-full py-2 text-sm" />
+      </div>
       {open ? (
         <div className="space-y-4 border-t border-[rgba(212,175,55,0.2)] px-4 py-4 md:hidden">
-          <form action="/buscar" className="flex gap-2">
-            <input name="q" placeholder="Buscar perfume" aria-label="Buscar perfume" className="field min-w-0 flex-1" />
-            <button type="submit" className="btn-gold shrink-0 px-4">
-              Buscar
-            </button>
-          </form>
           <div className="grid gap-3 text-sm tracking-[0.16em] uppercase">
             {LINKS.map((link) => (
               <Link key={link.href} href={link.href}>

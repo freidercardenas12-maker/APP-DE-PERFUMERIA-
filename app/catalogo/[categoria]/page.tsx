@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: Context): Promise<Metadata> {
 export default async function CatalogPage({ params }: Context) {
   const { categoria } = await params;
   if (!isCategoria(categoria)) notFound();
-  const products = (await getProducts()).filter((product) => product.categoria === categoria);
-  return <CatalogView categoria={categoria} products={products} />;
+  const catalogo = await getProducts();
+  const products = catalogo.filter((product) => product.categoria === categoria);
+  return <CatalogView categoria={categoria} products={products} catalogo={catalogo} />;
 }

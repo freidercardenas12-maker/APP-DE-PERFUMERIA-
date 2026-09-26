@@ -2,7 +2,7 @@ import { CartProvider } from "@/components/CartProvider";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
-import { getSettings } from "@/lib/store";
+import { getProducts, getSettings } from "@/lib/store";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
 import "./globals.css";
@@ -31,13 +31,13 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSettings();
+  const [settings, products] = await Promise.all([getSettings(), getProducts()]);
   return (
     <html lang="es">
       <body className={`${outfit.variable} ${cormorant.variable} font-sans antialiased`}>
         <CartProvider>
           <div className="site-shell flex min-h-screen flex-col">
-            <Header />
+            <Header catalogo={products} />
             <main className="flex-1">{children}</main>
             <Footer settings={settings} />
           </div>
