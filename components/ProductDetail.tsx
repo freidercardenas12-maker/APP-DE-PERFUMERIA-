@@ -10,7 +10,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 export function ProductDetail({ product, related }: { product: Producto; related: Producto[] }) {
-  const { add } = useCart();
+  const { add, lines, count } = useCart();
+  const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const [cantidad, setCantidad] = useState(1);
   const vigente = precioVigente(product);
   const promo = tienePromo(product);
@@ -71,13 +72,18 @@ export function ProductDetail({ product, related }: { product: Producto; related
             </div>
             <button
               type="button"
-              className="btn-gold"
+              className={enPedido > 0 ? "btn-added" : "btn-gold"}
               disabled={!product.disponible}
               onClick={() => add(product.id, cantidad, product.nombre)}
             >
-              {product.disponible ? "Agregar al carrito" : "Agotado"}
+              {!product.disponible ? "Agotado" : enPedido > 0 ? `Agregado · ${enPedido}` : "Agregar al carrito"}
             </button>
           </div>
+          {enPedido > 0 ? (
+            <p className="mt-3 text-sm text-[#e8d5a3]">
+              Este perfume ya está en el pedido ({enPedido}). En total llevas {count} {count === 1 ? "perfume" : "perfumes"}.
+            </p>
+          ) : null}
           {product.video_url ? (
             <a href={product.video_url} target="_blank" rel="noreferrer" className="btn-ghost mt-4">
               Ver video y disponibilidad

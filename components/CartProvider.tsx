@@ -4,7 +4,7 @@ import Link from "next/link";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type CartLine = { id: string; cantidad: number };
-type Toast = { id: number; text: string };
+type Toast = { id: number; nombre: string; total: number };
 
 type CartContextValue = {
   lines: CartLine[];
@@ -58,14 +58,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       count,
       toast,
       add: (id, cantidad = 1, nombre) => {
+        const found = lines.find((line) => line.id === id);
+        const nextQty = Math.min(99, (found?.cantidad ?? 0) + cantidad);
+        const total = count - (found?.cantidad ?? 0) + nextQty;
         setLines((current) => {
-          const found = current.find((line) => line.id === id);
-          if (!found) return [...current, { id, cantidad }];
+          const existing = current.find((line) => line.id === id);
+          if (!existing) return [...current, { id, cantidad: Math.min(99, cantidad) }];
           return current.map((line) =>
             line.id === id ? { ...line, cantidad: Math.min(99, line.cantidad + cantidad) } : line,
           );
         });
-        setToast({ id: Date.now(), text: nombre ? `${nombre} se agregó al pedido` : "Producto agregado" });
+        setToast({ id: Date.now(), nombre: nombre || "Perfume", total });
       },
       setCantidad: (id, cantidad) => {
         const next = Math.max(1, Math.min(99, cantidad));
@@ -80,11 +83,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider value={value}>
       {children}
       {toast ? (
-        <div className="fixed bottom-24 left-1/2 z-50 flex w-[min(92vw,420px)] -translate-x-1/2 items-center justify-between gap-3 border border-[rgba(212,175,55,0.45)] bg-[#121212] px-4 py-3 text-sm text-[#e8d5a3] shadow-2xl">
-          <p>{toast.text}</p>
-          <Link href="/carrito" className="shrink-0 text-xs tracking-[0.14em] text-[#d4af37] uppercase">
-            Ver pedido
-          </Link>
+        <div
+          role="status"
+          className="toast-in fixed top-[4.75rem] left-1/2 z-[80] w-[min(92vw,440px)] -translate-x-1/2 border-2 border-[#d4af37] bg-[#120e09] px-4 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.65)]"
+        >
+          <p className="text-xs tracking-[0.2em] text-[#d4af37] uppercase">Agregado al pedido</p>
+          <p className="mt-1 font-serif text-2xl leading-tight text-[#f6f1e7]">{toast.nombre}</p>
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-[#e8d5a3]">
+              Llevas <span className="font-semibold text-[#f3e0a8]">{toast.total}</span>{" "}
+              {toast.total === 1 ? "perfume" : "perfumes"}
+            </p>
+            <Link href="/carrito" className="btn-gold shrink-0 px-3 py-2 text-[0.68rem]">
+              Ver pedido
+            </Link>
+          </div>
         </div>
       ) : null}
     </CartContext.Provider>

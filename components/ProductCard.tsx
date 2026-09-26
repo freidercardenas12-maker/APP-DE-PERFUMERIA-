@@ -6,11 +6,10 @@ import { CATEGORY_META } from "@/lib/categories";
 import { formatCOP, formatTalla, precioVigente, tienePromo } from "@/lib/format";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
-import { useState } from "react";
 
 export function ProductCard({ product }: { product: Producto }) {
-  const { add } = useCart();
-  const [added, setAdded] = useState(false);
+  const { add, lines } = useCart();
+  const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const vigente = precioVigente(product);
   const promo = tienePromo(product);
 
@@ -34,6 +33,11 @@ export function ProductCard({ product }: { product: Producto }) {
               Promo
             </span>
           ) : null}
+          {enPedido > 0 ? (
+            <span className="absolute right-3 bottom-3 bg-[#d4af37] px-2 py-1 text-xs font-semibold text-[#1a1203]">
+              ×{enPedido}
+            </span>
+          ) : null}
         </div>
         <div className="space-y-1 px-4 pt-4">
           <p className="text-[0.68rem] tracking-[0.18em] text-[var(--accent)] uppercase">
@@ -50,15 +54,11 @@ export function ProductCard({ product }: { product: Producto }) {
         </div>
         <button
           type="button"
-          className="btn-gold w-full px-3 py-2 text-[0.68rem]"
+          className={`${enPedido > 0 ? "btn-added" : "btn-gold"} w-full px-3 py-2 text-[0.68rem]`}
           disabled={!product.disponible}
-          onClick={() => {
-            add(product.id, 1, product.nombre);
-            setAdded(true);
-            window.setTimeout(() => setAdded(false), 1200);
-          }}
+          onClick={() => add(product.id, 1, product.nombre)}
         >
-          {!product.disponible ? "Agotado" : added ? "Agregado" : "Agregar"}
+          {!product.disponible ? "Agotado" : enPedido > 0 ? `Agregado · ${enPedido}` : "Agregar"}
         </button>
       </div>
     </article>
