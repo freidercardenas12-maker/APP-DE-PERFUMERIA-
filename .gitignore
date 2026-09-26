@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+.env.local
+*.log
+public/uploads/*
+!public/uploads/.gitkeep
+data/products.json.tmp
+data/settings.json.tmp
+__pycache__/
+*.pyc
+files/
+files.zip
+PERFUMES ARABES/
+PERFUMES DE DAMA/
+PERFUMES HOMBRES/
