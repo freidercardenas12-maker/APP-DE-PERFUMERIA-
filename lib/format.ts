@@ -46,6 +46,13 @@ export function precioUnitario(producto: Pick<Producto, "precio" | "precio_promo
   return escala.uno;
 }
 
+export function gananciaReventa(producto: Pick<Producto, "precio" | "precio_promocion">) {
+  const venta = precioUnitario(producto, 1);
+  const compra = precioUnitario(producto, 12);
+  const porUnidad = venta - compra;
+  return { venta, compra, porUnidad, docena: porUnidad * 12 };
+}
+
 export function waLink(phone: string, text: string): string {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;

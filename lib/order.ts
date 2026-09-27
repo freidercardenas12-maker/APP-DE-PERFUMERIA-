@@ -10,6 +10,7 @@ export function mensajeConsulta(input: {
   cantidad: number;
   unitario: number;
   url: string;
+  reventa?: string;
 }): string {
   return [
     "Hola! Quiero información de este perfume.",
@@ -20,9 +21,12 @@ export function mensajeConsulta(input: {
     `Cantidad: ${input.cantidad}`,
     `Precio por unidad: ${formatCOP(input.unitario)}`,
     `Total: ${formatCOP(input.unitario * input.cantidad)}`,
+    input.reventa ?? "",
     "",
     input.url,
-  ].join("\n");
+  ]
+    .filter((line, index, lines) => line !== "" || lines[index - 1] !== "")
+    .join("\n");
 }
 
 export function mensajePedido(

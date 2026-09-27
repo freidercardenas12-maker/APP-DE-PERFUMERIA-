@@ -4,7 +4,7 @@ import { perfilAroma } from "@/lib/aroma";
 import { Bottle } from "@/components/Bottle";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, tienePromo } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo } from "@/lib/format";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 
@@ -12,13 +12,19 @@ export function ProductCard({ product }: { product: Producto }) {
   const { add, lines, setCantidad } = useCart();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const detalle = precioUnitario(product, 1);
-  const porDoce = precioUnitario(product, 12);
+  const reventa = gananciaReventa(product);
   const promo = tienePromo(product);
 
   function llevar(cantidad: number) {
     if (!product.disponible) return;
     if (enPedido === 0) add(product.id, cantidad, product.nombre);
     else setCantidad(product.id, cantidad);
+  }
+
+  function llevarDocena() {
+    if (!product.disponible) return;
+    if (enPedido === 0 || enPedido >= 12) add(product.id, 12, product.nombre);
+    else setCantidad(product.id, 12);
   }
 
   return (
@@ -60,11 +66,15 @@ export function ProductCard({ product }: { product: Producto }) {
         <div>
           {promo ? <p className="text-xs text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
           <p className="text-lg text-[#e8d5a3]">{formatCOP(detalle)}</p>
-          <p className="text-[0.68rem] text-[#f6f1e7]/70">12 und. {formatCOP(porDoce)} c/u</p>
-          <p className="text-[0.65rem] tracking-[0.12em] text-[#d4af37] uppercase">Mayorista y al detal</p>
+          <p className="text-[0.68rem] text-[#f6f1e7]/70">12 und. {formatCOP(reventa.compra)} c/u</p>
+          {reventa.porUnidad > 0 ? (
+            <p className="text-[0.68rem] leading-4 text-[#e8d5a3]">
+              Si las vendes a {formatCOP(reventa.venta)}, te quedan {formatCOP(reventa.porUnidad)} c/u
+            </p>
+          ) : null}
         </div>
-        <div className="grid grid-cols-3 gap-1">
-          {CANTIDADES_MAYOR.map((cantidad) => (
+        <div className="grid grid-cols-2 gap-1">
+          {CANTIDADES_MAYOR.filter((cantidad) => cantidad < 12).map((cantidad) => (
             <button
               key={cantidad}
               type="button"
@@ -72,17 +82,25 @@ export function ProductCard({ product }: { product: Producto }) {
               className="border border-[rgba(212,175,55,0.35)] py-1.5 text-[0.62rem] tracking-[0.06em] text-[#e8d5a3] uppercase disabled:opacity-40"
               onClick={() => llevar(cantidad)}
             >
-              {cantidad} und.
+              {cantidad} und. · {formatCOP(precioUnitario(product, cantidad))}
             </button>
           ))}
         </div>
         <button
           type="button"
-          className={`${enPedido > 0 ? "btn-added" : "btn-gold"} w-full px-3 py-2 text-[0.68rem]`}
+          className="btn-gold w-full px-3 py-2 text-[0.68rem]"
+          disabled={!product.disponible}
+          onClick={llevarDocena}
+        >
+          {!product.disponible ? "Agotado" : `Llevar 12 · ${formatCOP(reventa.compra)}`}
+        </button>
+        <button
+          type="button"
+          className="btn-ghost w-full px-3 py-2 text-[0.68rem]"
           disabled={!product.disponible}
           onClick={() => add(product.id, 1, product.nombre)}
         >
-          {!product.disponible ? "Agotado" : enPedido > 0 ? `Agregado · ${enPedido}` : "Agregar"}
+          Agregar 1 · {formatCOP(detalle)}
         </button>
       </div>
     </article>

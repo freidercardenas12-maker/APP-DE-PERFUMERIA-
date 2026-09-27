@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
 import { ShareButton } from "@/components/ShareButton";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, tienePromo, waLink } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo, waLink } from "@/lib/format";
 import { mensajeConsulta } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
@@ -30,8 +30,16 @@ export function ProductDetail({
   const [cantidad, setCantidad] = useState(1);
   const detalle = precioUnitario(product, 1);
   const unitario = precioUnitario(product, cantidad);
+  const reventa = gananciaReventa(product);
   const promo = tienePromo(product);
   const baja = unitario < detalle;
+
+  function llevarDocena() {
+    if (!product.disponible) return;
+    setCantidad(12);
+    if (enPedido === 0 || enPedido >= 12) add(product.id, 12, product.nombre);
+    else add(product.id, 12 - enPedido, product.nombre);
+  }
   const meta = CATEGORY_META[product.categoria];
 
   return (
@@ -72,11 +80,12 @@ export function ProductDetail({
             <p className="mt-1 text-sm text-[#f6f1e7]/70">
               por unidad · {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
             </p>
-            {baja ? (
-              <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(detalle - unitario)} en cada una.</p>
-            ) : (
-              <p className="mt-1 text-sm text-[#e8d5a3]">Lleva 3, 6 o 12 y baja el precio por unidad.</p>
-            )}
+            {baja ? <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(detalle - unitario)} en cada una.</p> : null}
+            {reventa.porUnidad > 0 ? (
+              <p className="mt-3 border border-[rgba(212,175,55,0.35)] bg-[rgba(212,175,55,0.08)] px-4 py-3 text-sm leading-6 text-[#f6f1e7]">
+                12 unidades a {formatCOP(reventa.compra)}. Si las vendes a {formatCOP(reventa.venta)}, te quedan {formatCOP(reventa.porUnidad)} por cada una. En la docena, {formatCOP(reventa.docena)}.
+              </p>
+            ) : null}
           </div>
           {product.notas.length > 0 ? (
             <div className="mt-6">
@@ -102,24 +111,31 @@ export function ProductDetail({
               </button>
             ))}
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <div className="flex items-center border border-[rgba(212,175,55,0.35)]">
-              <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.max(1, value - 1))} aria-label="Disminuir">
-                −
-              </button>
-              <span className="min-w-8 text-center">{cantidad}</span>
-              <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.min(99, value + 1))} aria-label="Aumentar">
-                +
-              </button>
-            </div>
-            <button
-              type="button"
-              className={enPedido > 0 ? "btn-added" : "btn-gold"}
-              disabled={!product.disponible}
-              onClick={() => add(product.id, cantidad, product.nombre)}
-            >
-              {!product.disponible ? "Agotado" : enPedido > 0 ? `Agregado · ${enPedido}` : "Agregar al carrito"}
+          <div className="mt-4 grid gap-3">
+            <button type="button" className="btn-gold w-full" disabled={!product.disponible} onClick={llevarDocena}>
+              {!product.disponible ? "Agotado" : `Llevar 12 · ${formatCOP(reventa.compra)} cada una`}
             </button>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center border border-[rgba(212,175,55,0.35)]">
+                <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.max(1, value - 1))} aria-label="Disminuir">
+                  −
+                </button>
+                <span className="min-w-8 text-center">{cantidad}</span>
+                <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.min(99, value + 1))} aria-label="Aumentar">
+                  +
+                </button>
+              </div>
+              {cantidad === 12 ? null : (
+                <button
+                  type="button"
+                  className="btn-ghost"
+                  disabled={!product.disponible}
+                  onClick={() => add(product.id, cantidad, product.nombre)}
+                >
+                  {cantidad === 1 ? `Agregar 1 · ${formatCOP(detalle)}` : `Agregar ${cantidad} · ${formatCOP(unitario)} c/u`}
+                </button>
+              )}
+            </div>
             {whatsapp ? (
               <button
                 type="button"
@@ -133,6 +149,10 @@ export function ProductDetail({
                     cantidad,
                     unitario,
                     url: window.location.href,
+                    reventa:
+                      reventa.porUnidad > 0
+                        ? `12 unidades a ${formatCOP(reventa.compra)}. Si las vendes a ${formatCOP(reventa.venta)}, te quedan ${formatCOP(reventa.porUnidad)} por cada una.`
+                        : undefined,
                   });
                   window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
                 }}
@@ -143,7 +163,7 @@ export function ProductDetail({
             <ShareButton
               label="Compartir este perfume"
               title={product.nombre}
-              text={`${product.nombre}. ${perfilAroma(product).frase} ${formatCOP(unitario)}`}
+              text={`${product.nombre}. ${perfilAroma(product).frase} 12 unidades a ${formatCOP(reventa.compra)}. Si las vendes a ${formatCOP(reventa.venta)}, te quedan ${formatCOP(reventa.porUnidad)} por cada una.`}
             />
           </div>
           <p className="mt-4 text-sm leading-6 text-[#f6f1e7]/70">
