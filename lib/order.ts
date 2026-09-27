@@ -2,6 +2,30 @@ import { CATEGORY_META } from "@/lib/categories";
 import { formatCOP, formatTalla, precioVigente } from "@/lib/format";
 import type { ClientePedido, Producto } from "@/lib/types";
 
+export function mensajeConsulta(input: {
+  nombre: string;
+  linea: string;
+  talla: string;
+  aroma: string;
+  cantidad: number;
+  unitario: number;
+  porSeis: number;
+  url: string;
+}): string {
+  return [
+    "Hola! Quiero información de este perfume.",
+    "",
+    `*${input.nombre}*`,
+    `${input.linea} · ${input.talla}`,
+    input.aroma,
+    `Cantidad: ${input.cantidad}`,
+    `Precio por unidad: ${formatCOP(input.unitario)}`,
+    `Desde 6 unidades: ${formatCOP(input.porSeis)} c/u`,
+    "",
+    input.url,
+  ].join("\n");
+}
+
 export function mensajePedido(
   lineas: { producto: Producto; cantidad: number; unitario: number }[],
   cliente: ClientePedido,

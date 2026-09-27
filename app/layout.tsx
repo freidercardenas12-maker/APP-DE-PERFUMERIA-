@@ -22,12 +22,19 @@ const cormorant = Cormorant_Garamond({
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://app-de-perfumeria.onrender.com"),
   title: {
     default: "Aura & Essentia",
     template: "%s | Aura & Essentia",
   },
   description:
     "Aura & Essentia. Perfumes equivalencia calidad 1.1 al por mayor y al detal en Colombia. Los mejores precios. Catálogo de dama, caballero y árabe, con pedido por WhatsApp.",
+  openGraph: {
+    title: "Aura & Essentia",
+    description: "Perfumes al por mayor y al detal. Los mejores precios. Dama, caballero y árabe.",
+    locale: "es_CO",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

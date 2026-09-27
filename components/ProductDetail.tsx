@@ -5,12 +5,26 @@ import { Bottle } from "@/components/Bottle";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, tienePromo } from "@/lib/format";
+import { ShareButton } from "@/components/ShareButton";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, tienePromo, waLink } from "@/lib/format";
+import { mensajeConsulta } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 import { useState } from "react";
 
-export function ProductDetail({ product, related }: { product: Producto; related: Producto[] }) {
+export function ProductDetail({
+  product,
+  related,
+  whatsapp,
+  pago,
+  entrega,
+}: {
+  product: Producto;
+  related: Producto[];
+  whatsapp: string;
+  pago: string;
+  entrega: string;
+}) {
   const { add, lines, count } = useCart();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const [cantidad, setCantidad] = useState(1);
@@ -106,7 +120,36 @@ export function ProductDetail({ product, related }: { product: Producto; related
             >
               {!product.disponible ? "Agotado" : enPedido > 0 ? `Agregado · ${enPedido}` : "Agregar al carrito"}
             </button>
+            {whatsapp ? (
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={() => {
+                  const text = mensajeConsulta({
+                    nombre: product.nombre,
+                    linea: meta.label,
+                    talla: formatTalla(product.talla_ml),
+                    aroma: perfilAroma(product).frase,
+                    cantidad,
+                    unitario,
+                    porSeis: precioUnitario(product, 6),
+                    url: window.location.href,
+                  });
+                  window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
+                }}
+              >
+                Preguntar por este por WhatsApp
+              </button>
+            ) : null}
+            <ShareButton
+              label="Compartir este perfume"
+              title={product.nombre}
+              text={`${product.nombre}. ${perfilAroma(product).frase} ${formatCOP(unitario)}`}
+            />
           </div>
+          <p className="mt-4 text-sm leading-6 text-[#f6f1e7]/70">
+            {entrega} {pago}
+          </p>
           {enPedido > 0 ? (
             <p className="mt-3 text-sm text-[#e8d5a3]">
               Este perfume ya está en el pedido ({enPedido}). En total llevas {count} {count === 1 ? "perfume" : "perfumes"}.

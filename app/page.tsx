@@ -1,4 +1,5 @@
 import { ProductGrid } from "@/components/ProductGrid";
+import { ShareButton } from "@/components/ShareButton";
 import { CATEGORY_META } from "@/lib/categories";
 import { getProducts, getSettings } from "@/lib/store";
 import { CATEGORIAS } from "@/lib/types";
@@ -44,12 +45,33 @@ export default async function HomePage() {
               <Link href="/catalogo/arabe" className="btn-ghost">
                 Árabe / nicho
               </Link>
+              <ShareButton
+                label="Compartir catálogo"
+                title="Aura & Essentia"
+                text="Perfumes al por mayor y al detal. Los mejores precios."
+              />
+              {settings.instagram ? (
+                <a href={settings.instagram} target="_blank" rel="noreferrer" className="btn-ghost">
+                  Instagram
+                </a>
+              ) : null}
             </div>
           </div>
           <div className="order-1 grid place-items-center md:order-2">
             <img src="/logo.jpg" alt="Aura & Essentia" className="h-auto w-full max-w-xs md:max-w-sm" />
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-4 px-4 pt-10 md:grid-cols-2">
+        <article className="border border-[rgba(212,175,55,0.18)] p-6">
+          <h2 className="font-serif text-3xl">Envío</h2>
+          <p className="mt-2 text-sm leading-6 text-[#f6f1e7]/75">{settings.entrega}</p>
+        </article>
+        <article className="border border-[rgba(212,175,55,0.18)] p-6">
+          <h2 className="font-serif text-3xl">Pago</h2>
+          <p className="mt-2 text-sm leading-6 text-[#f6f1e7]/75">{settings.pago}</p>
+        </article>
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-4 px-4 py-12 md:grid-cols-3">

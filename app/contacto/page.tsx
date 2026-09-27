@@ -41,6 +41,18 @@ export default async function ContactPage() {
             <dt className="text-xs tracking-[0.16em] text-[#d4af37] uppercase">Cobertura</dt>
             <dd className="mt-1">{settings.cobertura}</dd>
           </div>
+          {settings.entrega ? (
+            <div>
+              <dt className="text-xs tracking-[0.16em] text-[#d4af37] uppercase">Envío</dt>
+              <dd className="mt-1">{settings.entrega}</dd>
+            </div>
+          ) : null}
+          {settings.pago ? (
+            <div>
+              <dt className="text-xs tracking-[0.16em] text-[#d4af37] uppercase">Pago</dt>
+              <dd className="mt-1">{settings.pago}</dd>
+            </div>
+          ) : null}
           {settings.sitio ? (
             <div>
               <dt className="text-xs tracking-[0.16em] text-[#d4af37] uppercase">Sitio</dt>

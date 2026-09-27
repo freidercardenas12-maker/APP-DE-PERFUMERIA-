@@ -256,6 +256,14 @@ export function AdminPanel({
             Cobertura
             <input value={settings.cobertura} onChange={(event) => setSettings({ ...settings, cobertura: event.target.value })} className="field mt-2" />
           </label>
+          <label className="text-xs tracking-[0.14em] text-[#e8d5a3] uppercase md:col-span-2">
+            Envío
+            <input value={settings.entrega} onChange={(event) => setSettings({ ...settings, entrega: event.target.value })} className="field mt-2" />
+          </label>
+          <label className="text-xs tracking-[0.14em] text-[#e8d5a3] uppercase md:col-span-2">
+            Pago
+            <input value={settings.pago} onChange={(event) => setSettings({ ...settings, pago: event.target.value })} className="field mt-2" />
+          </label>
           <div className="md:col-span-2">
             <button type="submit" className="btn-gold" disabled={saving}>
               Guardar cambios

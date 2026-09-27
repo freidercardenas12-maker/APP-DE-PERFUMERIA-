@@ -30,6 +30,8 @@ export type Ajustes = {
   sitio: string;
   horario: string;
   cobertura: string;
+  pago: string;
+  entrega: string;
 };
 
 export type ClientePedido = {

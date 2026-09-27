@@ -62,6 +62,9 @@ export function CartView({ products, settings }: { products: Producto[]; setting
       <p className="mt-2 text-sm text-[#f6f1e7]/65">
         Precios mayoristas y al detal. Arma la lista y envíala por WhatsApp.
       </p>
+      <p className="mt-2 max-w-xl text-sm leading-6 text-[#e8d5a3]">
+        {settings.entrega} {settings.pago}
+      </p>
 
       {!ready ? <p className="mt-8 text-sm text-[#e8d5a3]">Cargando pedido…</p> : null}
 

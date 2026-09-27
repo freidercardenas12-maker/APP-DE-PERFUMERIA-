@@ -84,6 +84,8 @@ export function parseSettings(body: unknown): { settings: Ajustes } | { error: s
       sitio: asText(input.sitio, 120),
       horario: asText(input.horario, 120),
       cobertura: asText(input.cobertura, 160),
+      pago: asText(input.pago, 180),
+      entrega: asText(input.entrega, 180),
     },
   };
 }

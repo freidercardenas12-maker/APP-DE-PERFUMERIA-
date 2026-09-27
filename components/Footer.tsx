@@ -20,7 +20,8 @@ export function Footer({ settings }: { settings: Ajustes }) {
         <div className="text-sm leading-7 text-[#f6f1e7]/75">
           <p className="font-serif text-xl text-[#e8d5a3]">Visítanos</p>
           <p>{settings.horario}</p>
-          <p>{settings.cobertura}</p>
+          <p>{settings.entrega || settings.cobertura}</p>
+          {settings.pago ? <p>{settings.pago}</p> : null}
           {settings.correo ? (
             <p>
               <a href={`mailto:${settings.correo}`}>{settings.correo}</a>
