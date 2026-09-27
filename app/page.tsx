@@ -1,15 +1,25 @@
+import { PedidoSeis } from "@/components/PedidoSeis";
 import { ProductGrid } from "@/components/ProductGrid";
 import { ShareButton } from "@/components/ShareButton";
 import { CATEGORY_META } from "@/lib/categories";
 import { getProducts, getSettings } from "@/lib/store";
-import { CATEGORIAS } from "@/lib/types";
+import { CATEGORIAS, type Producto } from "@/lib/types";
 import Link from "next/link";
+
+function seisListos(products: Producto[]) {
+  return CATEGORIAS.flatMap((categoria) => {
+    const linea = products.filter((product) => product.categoria === categoria && product.disponible && product.talla_ml != null);
+    const destacadosLinea = linea.filter((product) => product.destacado);
+    return (destacadosLinea.length >= 2 ? destacadosLinea : linea).slice(0, 2);
+  });
+}
 
 export default async function HomePage() {
   const [products, settings] = await Promise.all([getProducts(), getSettings()]);
   const destacados = CATEGORIAS.flatMap((categoria) =>
     products.filter((product) => product.categoria === categoria && product.destacado && product.disponible).slice(0, 4),
   );
+  const pedidoSeis = seisListos(products);
   const counts = Object.fromEntries(CATEGORIAS.map((categoria) => [categoria, products.filter((product) => product.categoria === categoria).length]));
 
   return (
@@ -87,6 +97,8 @@ export default async function HomePage() {
           );
         })}
       </section>
+
+      <PedidoSeis products={pedidoSeis} />
 
       <section className="mx-auto max-w-6xl px-4 pb-6">
         <div className="mb-6 flex items-end justify-between gap-4">

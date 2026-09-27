@@ -12,6 +12,7 @@ type CartContextValue = {
   count: number;
   toast: Toast | null;
   add: (id: string, cantidad?: number, nombre?: string) => void;
+  addVarios: (items: { id: string; cantidad?: number }[], nombre: string) => void;
   setCantidad: (id: string, cantidad: number) => void;
   remove: (id: string) => void;
   clear: () => void;
@@ -69,6 +70,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           );
         });
         setToast({ id: Date.now(), nombre: nombre || "Perfume", total });
+      },
+      addVarios: (items, nombre) => {
+        const additions = items
+          .filter((item) => item.id)
+          .map((item) => ({ id: item.id, cantidad: Math.min(99, Math.max(1, item.cantidad ?? 1)) }));
+        setLines((current) => {
+          const next = current.map((line) => ({ ...line }));
+          for (const item of additions) {
+            const index = next.findIndex((line) => line.id === item.id);
+            if (index === -1) next.push(item);
+            else next[index] = { ...next[index], cantidad: Math.min(99, next[index].cantidad + item.cantidad) };
+          }
+          return next;
+        });
+        const total = count + additions.reduce((sum, item) => sum + item.cantidad, 0);
+        setToast({ id: Date.now(), nombre, total });
       },
       setCantidad: (id, cantidad) => {
         const next = Math.max(1, Math.min(99, cantidad));
