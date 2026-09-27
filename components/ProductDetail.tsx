@@ -4,7 +4,7 @@ import { Bottle } from "@/components/Bottle";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { formatCOP, formatTalla, precioVigente, tienePromo } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, tienePromo } from "@/lib/format";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,7 +14,9 @@ export function ProductDetail({ product, related }: { product: Producto; related
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const [cantidad, setCantidad] = useState(1);
   const vigente = precioVigente(product);
+  const unitario = precioUnitario(product, cantidad);
   const promo = tienePromo(product);
+  const porCantidad = unitario < vigente;
   const meta = CATEGORY_META[product.categoria];
 
   return (
@@ -47,7 +49,16 @@ export function ProductDetail({ product, related }: { product: Producto; related
             <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista y al detal</p>
             <p className="mt-1 text-xs tracking-[0.16em] text-[#d4af37] uppercase">Los mejores precios</p>
             {promo ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
-            <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(vigente)}</p>
+            {porCantidad ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(vigente)}</p> : null}
+            <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(unitario)}</p>
+            <p className="mt-1 text-sm text-[#f6f1e7]/70">
+              por unidad · {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
+            </p>
+            {porCantidad ? (
+              <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(vigente - unitario)} en cada una.</p>
+            ) : (
+              <p className="mt-1 text-sm text-[#e8d5a3]">Desde 3 unidades baja el precio. Desde 6 queda mejor.</p>
+            )}
           </div>
           {product.notas.length > 0 ? (
             <div className="mt-6">
@@ -61,7 +72,19 @@ export function ProductDetail({ product, related }: { product: Producto; related
               </div>
             </div>
           ) : null}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-6 flex flex-wrap gap-2">
+            {CANTIDADES_MAYOR.map((unidades) => (
+              <button
+                key={unidades}
+                type="button"
+                className={`border px-3 py-2 text-xs tracking-[0.12em] uppercase ${cantidad === unidades ? "border-[#d4af37] bg-[#d4af37] text-[#1a1203]" : "border-[rgba(212,175,55,0.35)] text-[#e8d5a3]"}`}
+                onClick={() => setCantidad(unidades)}
+              >
+                {unidades} und. · {formatCOP(precioUnitario(product, unidades))}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <div className="flex items-center border border-[rgba(212,175,55,0.35)]">
               <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.max(1, value - 1))} aria-label="Disminuir">
                 −

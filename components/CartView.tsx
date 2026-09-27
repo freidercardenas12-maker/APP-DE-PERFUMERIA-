@@ -2,7 +2,7 @@
 
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { formatCOP, formatTalla, precioVigente, waLink } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, waLink } from "@/lib/format";
 import { mensajePedido } from "@/lib/order";
 import type { Ajustes, ClientePedido, Producto } from "@/lib/types";
 import Link from "next/link";
@@ -19,7 +19,13 @@ export function CartView({ products, settings }: { products: Producto[]; setting
     return lines.map((line) => {
       const producto = products.find((product) => product.id === line.id);
       if (!producto) return { missing: true as const, id: line.id, cantidad: line.cantidad };
-      return { missing: false as const, producto, cantidad: line.cantidad, unitario: precioVigente(producto) };
+      return {
+        missing: false as const,
+        producto,
+        cantidad: line.cantidad,
+        unitario: precioUnitario(producto, line.cantidad),
+        base: precioVigente(producto),
+      };
     });
   }, [lines, products]);
 
@@ -111,7 +117,24 @@ export function CartView({ products, settings }: { products: Producto[]; setting
                         +
                       </button>
                     </div>
-                    <p className="text-[#e8d5a3]">{formatCOP(row.unitario * row.cantidad)}</p>
+                    <div className="text-right">
+                      <p className="text-[#e8d5a3]">{formatCOP(row.unitario * row.cantidad)}</p>
+                      {row.unitario < row.base ? (
+                        <p className="text-xs text-[#f6f1e7]/60">{formatCOP(row.unitario)} c/u</p>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {CANTIDADES_MAYOR.map((unidades) => (
+                      <button
+                        key={unidades}
+                        type="button"
+                        className={`border px-2 py-1 text-[0.65rem] tracking-[0.08em] uppercase ${row.cantidad === unidades ? "border-[#d4af37] text-[#e8d5a3]" : "border-[rgba(212,175,55,0.28)] text-[#f6f1e7]/70"}`}
+                        onClick={() => setCantidad(row.producto.id, unidades)}
+                      >
+                        {unidades} und.
+                      </button>
+                    ))}
                   </div>
                 </li>
               ),
@@ -158,8 +181,25 @@ export function CartView({ products, settings }: { products: Producto[]; setting
                           onChange={(event) => setCantidad(row.producto.id, Number(event.target.value) || 1)}
                           className="field w-20 py-2"
                         />
+                        <div className="mt-2 flex gap-1">
+                          {CANTIDADES_MAYOR.map((unidades) => (
+                            <button
+                              key={unidades}
+                              type="button"
+                              className="border border-[rgba(212,175,55,0.28)] px-1.5 py-1 text-[0.62rem] text-[#e8d5a3]"
+                              onClick={() => setCantidad(row.producto.id, unidades)}
+                            >
+                              {unidades}
+                            </button>
+                          ))}
+                        </div>
                       </td>
-                      <td className="px-4 py-4">{formatCOP(row.unitario)}</td>
+                      <td className="px-4 py-4">
+                        {row.unitario < row.base ? (
+                          <p className="text-xs text-[#f6f1e7]/45 line-through">{formatCOP(row.base)}</p>
+                        ) : null}
+                        <p>{formatCOP(row.unitario)}</p>
+                      </td>
                       <td className="px-4 py-4">{formatCOP(row.unitario * row.cantidad)}</td>
                       <td className="px-4 py-4">
                         <button type="button" className="text-[#e8d5a3] underline" onClick={() => remove(row.producto.id)}>

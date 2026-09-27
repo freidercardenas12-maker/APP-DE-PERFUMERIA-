@@ -76,7 +76,7 @@ export default async function HomePage() {
       <section className="mx-auto grid max-w-6xl gap-4 px-4 py-12 md:grid-cols-3">
         {[
           ["01", "Elige", "Busca por nombre, precio o nota olfativa en las tres líneas."],
-          ["02", "Arma", "Suma cantidades. El total se calcula en pesos colombianos."],
+          ["02", "Arma", "Suma cantidades. Desde 3 unidades baja el precio de ese perfume, y desde 6 queda mejor."],
           ["03", "Envía", "Tus datos y la lista salen listos en un mensaje de WhatsApp."],
         ].map(([step, title, text]) => (
           <article key={step} className="border border-[rgba(212,175,55,0.18)] p-6">
