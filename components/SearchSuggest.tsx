@@ -1,5 +1,6 @@
 "use client";
 
+import { perfilAroma } from "@/lib/aroma";
 import { CATEGORY_META } from "@/lib/categories";
 import { formatTalla } from "@/lib/format";
 import { buscarPerfumes, type Buscable } from "@/lib/search";
@@ -64,6 +65,7 @@ export function SearchSuggest({
                   onClick={() => setOpen(false)}
                 >
                   <span className="block font-serif text-lg leading-tight">{item.nombre}</span>
+                  <span className="mt-0.5 block text-xs leading-5 text-[#f6f1e7]/70">{perfilAroma(item).frase}</span>
                   <span className="mt-0.5 block text-xs tracking-[0.12em] text-[#d4af37] uppercase">
                     {CATEGORY_META[item.categoria].label} · {formatTalla(item.talla_ml)}
                   </span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { perfilAroma } from "@/lib/aroma";
 import { Bottle } from "@/components/Bottle";
 import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
@@ -42,7 +43,10 @@ export function ProductDetail({ product, related }: { product: Producto; related
             Presentación: {formatTalla(product.talla_ml)} · Calidad 1.1
             {product.subcategoria ? ` · ${product.subcategoria}` : ""}
           </p>
-          <p className="mt-4 text-sm leading-6 text-[#e8d5a3]/90">
+          <p className="mt-4 border border-[rgba(212,175,55,0.28)] px-4 py-3 text-base leading-7 text-[#f6f1e7]">
+            {perfilAroma(product).frase}
+          </p>
+          <p className="mt-3 text-sm leading-6 text-[#e8d5a3]/90">
             Aroma equivalente. Fragancia inspirada, no es el producto original de la marca.
           </p>
           <div className="mt-6">

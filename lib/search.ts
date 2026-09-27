@@ -1,6 +1,9 @@
+import { perfilAroma } from "@/lib/aroma";
 import type { Producto } from "@/lib/types";
 
-export type Buscable = Pick<Producto, "id" | "nombre" | "categoria" | "talla_ml" | "notas">;
+export type Buscable = Pick<Producto, "id" | "nombre" | "categoria" | "talla_ml" | "notas"> & {
+  subcategoria?: Producto["subcategoria"] | null;
+};
 
 export function fold(value: string): string {
   return value
@@ -38,12 +41,14 @@ function isSubsequence(query: string, word: string): boolean {
 function score(item: Buscable, query: string): number {
   const name = fold(item.nombre);
   const notes = fold(item.notas.join(" "));
-  const hay = `${name} ${notes}`;
+  const aroma = fold(perfilAroma(item).frase);
+  const hay = `${name} ${notes} ${aroma}`;
   if (!query) return 0;
   if (name === query) return 1000;
   if (name.startsWith(query)) return 860;
   if (name.includes(query)) return 720;
   if (notes.includes(query)) return 640;
+  if (aroma.includes(query)) return 560;
 
   const words = query.split(" ").filter(Boolean);
   if (words.length > 1 && words.every((word) => hay.includes(word))) return 600;

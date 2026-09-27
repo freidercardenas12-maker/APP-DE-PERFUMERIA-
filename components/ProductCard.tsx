@@ -1,5 +1,6 @@
 "use client";
 
+import { perfilAroma } from "@/lib/aroma";
 import { Bottle } from "@/components/Bottle";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
@@ -52,6 +53,7 @@ export function ProductCard({ product }: { product: Producto }) {
           </p>
           <h3 className="line-clamp-3 font-serif text-xl leading-tight md:text-2xl">{product.nombre}</h3>
           <p className="text-sm text-[#f6f1e7]/60">{formatTalla(product.talla_ml)}</p>
+          <p className="line-clamp-2 text-xs leading-5 text-[#f6f1e7]/75">{perfilAroma(product).frase}</p>
         </div>
       </Link>
       <div className="mt-auto grid gap-3 px-3 pt-3 pb-3 sm:px-4 sm:pb-4">

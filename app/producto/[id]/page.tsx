@@ -1,4 +1,5 @@
 import { ProductDetail } from "@/components/ProductDetail";
+import { perfilAroma } from "@/lib/aroma";
 import { formatCOP, formatTalla, precioVigente } from "@/lib/format";
 import { getProduct, getProducts } from "@/lib/store";
 import type { Metadata } from "next";
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }: Context): Promise<Metadata> {
   if (!product) return { title: "Producto" };
   return {
     title: product.nombre,
-    description: `${product.nombre}, ${formatTalla(product.talla_ml)}, precio mayorista y al detal ${formatCOP(precioVigente(product))}. Los mejores precios. Aroma equivalente.`,
+    description: `${product.nombre}. ${perfilAroma(product).frase} ${formatTalla(product.talla_ml)}, precio mayorista y al detal ${formatCOP(precioVigente(product))}.`,
   };
 }
 

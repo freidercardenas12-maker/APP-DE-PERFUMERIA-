@@ -32,7 +32,7 @@ export default async function HomePage() {
               <p className="mt-4 max-w-lg font-serif text-2xl leading-snug text-[#e8d5a3]">{settings.promoSubtitulo}</p>
             ) : null}
             <p className="mt-6 max-w-lg text-base leading-7 text-[#f6f1e7]/75">
-              Al por mayor y al detal, con los mejores precios. Dama, caballero y árabe / nicho. Busca por nombre o nota, suma cantidades y el total sale listo en el mensaje.
+              Al por mayor y al detal, con los mejores precios. Dama, caballero y árabe / nicho. Busca por nombre, a qué huele o para qué ocasión, suma cantidades y el total sale listo en el mensaje.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/catalogo/dama" className="btn-gold">
@@ -75,7 +75,7 @@ export default async function HomePage() {
 
       <section className="mx-auto grid max-w-6xl gap-4 px-4 py-12 md:grid-cols-3">
         {[
-          ["01", "Elige", "Busca por nombre, precio o nota olfativa en las tres líneas."],
+          ["01", "Elige", "Busca por nombre, a qué huele o para qué ocasión: cita, regalo, día o noche."],
           ["02", "Arma", "Suma cantidades. Desde 3 unidades baja el precio de ese perfume, y desde 6 queda mejor."],
           ["03", "Envía", "Tus datos y la lista salen listos en un mensaje de WhatsApp."],
         ].map(([step, title, text]) => (
