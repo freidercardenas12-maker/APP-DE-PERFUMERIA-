@@ -29,21 +29,8 @@ export function tienePromo(producto: Pick<Producto, "precio" | "precio_promocion
 
 export const CANTIDADES_MAYOR = [3, 6, 12] as const;
 
-const TRAMOS_CANTIDAD = [
-  { desde: 12, factor: 0.88 },
-  { desde: 6, factor: 0.92 },
-  { desde: 3, factor: 0.95 },
-] as const;
-
-export function precioUnitario(producto: Pick<Producto, "precio" | "precio_promocion">, cantidad: number): number {
-  const base = precioVigente(producto);
-  const qty = Math.max(1, Math.floor(cantidad) || 1);
-  const tramo = TRAMOS_CANTIDAD.find((item) => qty >= item.desde);
-  if (!tramo) return base;
-  const redondeado = Math.round((base * tramo.factor) / 500) * 500;
-  if (redondeado < base && redondeado >= 500) return redondeado;
-  const menor = Math.floor((base * tramo.factor) / 500) * 500;
-  return menor >= 500 && menor < base ? menor : base;
+export function precioUnitario(producto: Pick<Producto, "precio" | "precio_promocion">, _cantidad: number): number {
+  return precioVigente(producto);
 }
 
 export function waLink(phone: string, text: string): string {

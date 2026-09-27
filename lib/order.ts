@@ -9,7 +9,6 @@ export function mensajeConsulta(input: {
   aroma: string;
   cantidad: number;
   unitario: number;
-  porSeis: number;
   url: string;
 }): string {
   return [
@@ -20,7 +19,7 @@ export function mensajeConsulta(input: {
     input.aroma,
     `Cantidad: ${input.cantidad}`,
     `Precio por unidad: ${formatCOP(input.unitario)}`,
-    `Desde 6 unidades: ${formatCOP(input.porSeis)} c/u`,
+    `Total: ${formatCOP(input.unitario * input.cantidad)}`,
     "",
     input.url,
   ].join("\n");

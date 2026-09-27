@@ -31,7 +31,6 @@ export function ProductDetail({
   const vigente = precioVigente(product);
   const unitario = precioUnitario(product, cantidad);
   const promo = tienePromo(product);
-  const porCantidad = unitario < vigente;
   const meta = CATEGORY_META[product.categoria];
 
   return (
@@ -67,16 +66,11 @@ export function ProductDetail({
             <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista y al detal</p>
             <p className="mt-1 text-xs tracking-[0.16em] text-[#d4af37] uppercase">Los mejores precios</p>
             {promo ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
-            {porCantidad ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(vigente)}</p> : null}
             <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(unitario)}</p>
             <p className="mt-1 text-sm text-[#f6f1e7]/70">
               por unidad · {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
             </p>
-            {porCantidad ? (
-              <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(vigente - unitario)} en cada una.</p>
-            ) : (
-              <p className="mt-1 text-sm text-[#e8d5a3]">Desde 3 unidades baja el precio. Desde 6 queda mejor.</p>
-            )}
+            <p className="mt-1 text-sm text-[#e8d5a3]">El precio por unidad no baja, aunque lleves más.</p>
           </div>
           {product.notas.length > 0 ? (
             <div className="mt-6">
@@ -98,7 +92,7 @@ export function ProductDetail({
                 className={`border px-3 py-2 text-xs tracking-[0.12em] uppercase ${cantidad === unidades ? "border-[#d4af37] bg-[#d4af37] text-[#1a1203]" : "border-[rgba(212,175,55,0.35)] text-[#e8d5a3]"}`}
                 onClick={() => setCantidad(unidades)}
               >
-                {unidades} und. · {formatCOP(precioUnitario(product, unidades))}
+                {unidades} und.
               </button>
             ))}
           </div>
@@ -132,7 +126,6 @@ export function ProductDetail({
                     aroma: perfilAroma(product).frase,
                     cantidad,
                     unitario,
-                    porSeis: precioUnitario(product, 6),
                     url: window.location.href,
                   });
                   window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
