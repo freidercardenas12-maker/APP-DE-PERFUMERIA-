@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
 import { ShareButton } from "@/components/ShareButton";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, tienePromo, waLink } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, tienePromo, waLink } from "@/lib/format";
 import { mensajeConsulta } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
@@ -28,9 +28,10 @@ export function ProductDetail({
   const { add, lines, count } = useCart();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const [cantidad, setCantidad] = useState(1);
-  const vigente = precioVigente(product);
+  const detalle = precioUnitario(product, 1);
   const unitario = precioUnitario(product, cantidad);
   const promo = tienePromo(product);
+  const baja = unitario < detalle;
   const meta = CATEGORY_META[product.categoria];
 
   return (
@@ -66,11 +67,16 @@ export function ProductDetail({
             <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista y al detal</p>
             <p className="mt-1 text-xs tracking-[0.16em] text-[#d4af37] uppercase">Los mejores precios</p>
             {promo ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
+            {baja ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(detalle)}</p> : null}
             <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(unitario)}</p>
             <p className="mt-1 text-sm text-[#f6f1e7]/70">
               por unidad · {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
             </p>
-            <p className="mt-1 text-sm text-[#e8d5a3]">El precio por unidad no baja, aunque lleves más.</p>
+            {baja ? (
+              <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(detalle - unitario)} en cada una.</p>
+            ) : (
+              <p className="mt-1 text-sm text-[#e8d5a3]">Lleva 3, 6 o 12 y baja el precio por unidad.</p>
+            )}
           </div>
           {product.notas.length > 0 ? (
             <div className="mt-6">
@@ -92,7 +98,7 @@ export function ProductDetail({
                 className={`border px-3 py-2 text-xs tracking-[0.12em] uppercase ${cantidad === unidades ? "border-[#d4af37] bg-[#d4af37] text-[#1a1203]" : "border-[rgba(212,175,55,0.35)] text-[#e8d5a3]"}`}
                 onClick={() => setCantidad(unidades)}
               >
-                {unidades} und.
+                {unidades} und. · {formatCOP(precioUnitario(product, unidades))}
               </button>
             ))}
           </div>

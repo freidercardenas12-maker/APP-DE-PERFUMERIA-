@@ -2,7 +2,7 @@
 
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, precioVigente, waLink } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, waLink } from "@/lib/format";
 import { mensajePedido } from "@/lib/order";
 import type { Ajustes, ClientePedido, Producto } from "@/lib/types";
 import Link from "next/link";
@@ -24,7 +24,7 @@ export function CartView({ products, settings }: { products: Producto[]; setting
         producto,
         cantidad: line.cantidad,
         unitario: precioUnitario(producto, line.cantidad),
-        base: precioVigente(producto),
+        base: precioUnitario(producto, 1),
       };
     });
   }, [lines, products]);

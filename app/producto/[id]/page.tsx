@@ -1,6 +1,6 @@
 import { ProductDetail } from "@/components/ProductDetail";
 import { perfilAroma } from "@/lib/aroma";
-import { formatCOP, formatTalla, precioVigente } from "@/lib/format";
+import { formatCOP, formatTalla, precioUnitario } from "@/lib/format";
 import { getProduct, getProducts, getSettings } from "@/lib/store";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Context): Promise<Metadata> {
   if (!product) return { title: "Producto" };
   return {
     title: product.nombre,
-    description: `${product.nombre}. ${perfilAroma(product).frase} ${formatTalla(product.talla_ml)}, precio mayorista y al detal ${formatCOP(precioVigente(product))}.`,
+    description: `${product.nombre}. ${perfilAroma(product).frase} ${formatTalla(product.talla_ml)}. Precio por unidad ${formatCOP(precioUnitario(product, 1))}. Desde 12 unidades, ${formatCOP(precioUnitario(product, 12))} cada una.`,
     openGraph: {
       title: product.nombre,
       description: perfilAroma(product).frase,

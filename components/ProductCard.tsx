@@ -4,14 +4,15 @@ import { perfilAroma } from "@/lib/aroma";
 import { Bottle } from "@/components/Bottle";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioVigente, tienePromo } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, precioUnitario, tienePromo } from "@/lib/format";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 
 export function ProductCard({ product }: { product: Producto }) {
   const { add, lines, setCantidad } = useCart();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
-  const vigente = precioVigente(product);
+  const detalle = precioUnitario(product, 1);
+  const porDoce = precioUnitario(product, 12);
   const promo = tienePromo(product);
 
   function llevar(cantidad: number) {
@@ -58,7 +59,8 @@ export function ProductCard({ product }: { product: Producto }) {
       <div className="mt-auto grid gap-3 px-3 pt-3 pb-3 sm:px-4 sm:pb-4">
         <div>
           {promo ? <p className="text-xs text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
-          <p className="text-lg text-[#e8d5a3]">{formatCOP(vigente)}</p>
+          <p className="text-lg text-[#e8d5a3]">{formatCOP(detalle)}</p>
+          <p className="text-[0.68rem] text-[#f6f1e7]/70">12 und. {formatCOP(porDoce)} c/u</p>
           <p className="text-[0.65rem] tracking-[0.12em] text-[#d4af37] uppercase">Mayorista y al detal</p>
         </div>
         <div className="grid grid-cols-3 gap-1">

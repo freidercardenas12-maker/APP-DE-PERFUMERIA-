@@ -29,8 +29,21 @@ export function tienePromo(producto: Pick<Producto, "precio" | "precio_promocion
 
 export const CANTIDADES_MAYOR = [3, 6, 12] as const;
 
-export function precioUnitario(producto: Pick<Producto, "precio" | "precio_promocion">, _cantidad: number): number {
-  return precioVigente(producto);
+function escalaPrecio(piso: number) {
+  const doce = piso;
+  const seis = Math.max(Math.ceil((piso * 1.05) / 1000) * 1000, doce + 1000);
+  const tres = Math.max(Math.ceil((piso * 1.1) / 1000) * 1000, seis + 1000);
+  const uno = Math.max(Math.ceil((piso * 1.15) / 1000) * 1000, tres + 1000);
+  return { uno, tres, seis, doce };
+}
+
+export function precioUnitario(producto: Pick<Producto, "precio" | "precio_promocion">, cantidad: number): number {
+  const escala = escalaPrecio(precioVigente(producto));
+  const qty = Math.max(1, Math.floor(cantidad) || 1);
+  if (qty >= 12) return escala.doce;
+  if (qty >= 6) return escala.seis;
+  if (qty >= 3) return escala.tres;
+  return escala.uno;
 }
 
 export function waLink(phone: string, text: string): string {

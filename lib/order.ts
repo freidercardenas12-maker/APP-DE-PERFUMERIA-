@@ -1,5 +1,5 @@
 import { CATEGORY_META } from "@/lib/categories";
-import { formatCOP, formatTalla, precioVigente } from "@/lib/format";
+import { formatCOP, formatTalla, precioUnitario } from "@/lib/format";
 import type { ClientePedido, Producto } from "@/lib/types";
 
 export function mensajeConsulta(input: {
@@ -35,7 +35,7 @@ export function mensajePedido(
     const talla = formatTalla(linea.producto.talla_ml);
     const subtotal = formatCOP(linea.unitario * linea.cantidad);
     const unitario = formatCOP(linea.unitario);
-    const porCantidad = linea.unitario < precioVigente(linea.producto) ? ` (precio por ${linea.cantidad} unidades)` : "";
+    const porCantidad = linea.unitario < precioUnitario(linea.producto, 1) ? ` (precio por ${linea.cantidad} unidades)` : "";
     return [
       `*${index + 1}. ${linea.producto.nombre}*`,
       `${lineaCatalogo} · ${talla}`,

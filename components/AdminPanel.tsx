@@ -394,8 +394,11 @@ export function AdminPanel({
                 <input value={draft.talla_ml} onChange={(event) => setDraft({ ...draft, talla_ml: event.target.value })} className="field mt-2" placeholder="Vacío si es accesorio" />
               </label>
               <label className="text-xs tracking-[0.14em] text-[#e8d5a3] uppercase">
-                Precio
+                Precio desde 12 unidades
                 <input value={draft.precio} onChange={(event) => setDraft({ ...draft, precio: event.target.value })} className="field mt-2" required />
+                <span className="mt-1 block text-[0.65rem] tracking-normal text-[#f6f1e7]/55 normal-case">
+                  Este es el mínimo. De 1 a 11 unidades la tienda cobra más arriba.
+                </span>
               </label>
               <label className="text-xs tracking-[0.14em] text-[#e8d5a3] uppercase">
                 Precio promoción
