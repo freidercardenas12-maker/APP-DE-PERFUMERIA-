@@ -103,20 +103,16 @@ export function CatalogView({
             {meta.kicker}
           </p>
           <h1 className="font-serif text-4xl md:text-6xl">{meta.headline}</h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-[#f6f1e7]/70">{meta.description}</p>
-          <p className="mt-2 text-sm tracking-[0.12em] text-[#d4af37] uppercase">
-            Mayorista y al detal · Los mejores precios
-          </p>
-          <p className="mt-2 text-base text-[#e8d5a3]">Si lleva 3, 6 o 12, cada uno sale más barato.</p>
+          <p className="mt-2 max-w-xl text-lg leading-7 text-[#f6f1e7]/75">Toque el perfume. Si lleva 12, cada uno sale más barato.</p>
         </div>
         <p className="text-sm text-[#e8d5a3]">
           {filtered.length} {filtered.length === 1 ? "referencia" : "referencias"}
         </p>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-3 md:hidden">
+      <div className="mt-6 flex flex-wrap items-center gap-3">
         <button type="button" className="btn-ghost" onClick={() => setFiltersOpen((value) => !value)}>
-          {filtersOpen ? "Ocultar filtros" : "Filtrar y ordenar"}
+          {filtersOpen ? "Ocultar filtros" : "Filtrar"}
         </button>
         {filtersActive ? (
           <button type="button" className="text-sm text-[#e8d5a3] underline" onClick={clearFilters}>
@@ -131,11 +127,11 @@ export function CatalogView({
           value={query}
           onChange={(next) => updateFilter(setQuery, next)}
           inputClassName="field w-full"
-          placeholder="Escribe cualquier letra. Busca en las tres líneas."
+          placeholder="Escriba el nombre del perfume"
         />
       </div>
 
-      <div className={`${filtersOpen ? "grid" : "hidden"} mt-4 gap-3 border border-[rgba(212,175,55,0.2)] p-4 md:mt-8 md:grid md:grid-cols-2 xl:grid-cols-4`}>
+      <div className={`${filtersOpen ? "grid" : "hidden"} mt-4 gap-3 border border-[rgba(212,175,55,0.2)] p-4 md:grid-cols-2 xl:grid-cols-4`}>
         <label className="block text-xs tracking-[0.14em] text-[#e8d5a3] uppercase">
           Ordenar
           <select value={sort} onChange={(event) => updateFilter(setSort, event.target.value)} className="field mt-2">

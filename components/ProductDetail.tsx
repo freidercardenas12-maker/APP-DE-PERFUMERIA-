@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
 import { ShareButton } from "@/components/ShareButton";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo, waLink } from "@/lib/format";
+import { formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo, waLink } from "@/lib/format";
 import { mensajeCompra } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
@@ -30,6 +30,7 @@ export function ProductDetail({
   const router = useRouter();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const [cantidad, setCantidad] = useState(1);
+  const [aviso, setAviso] = useState(false);
   const detalle = precioUnitario(product, 1);
   const unitario = precioUnitario(product, cantidad);
   const reventa = gananciaReventa(product);
@@ -47,7 +48,14 @@ export function ProductDetail({
       unitario,
       url: window.location.href,
     });
-    window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
+    const enlace = document.createElement("a");
+    enlace.href = waLink(whatsapp, text);
+    enlace.target = "_blank";
+    enlace.rel = "noopener noreferrer";
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+    setAviso(true);
   }
   const meta = CATEGORY_META[product.categoria];
 
@@ -100,18 +108,13 @@ export function ProductDetail({
                 Más
               </button>
             </div>
-            <div className="mt-3 grid gap-2">
-              {CANTIDADES_MAYOR.map((unidades) => (
-                <button
-                  key={unidades}
-                  type="button"
-                  className={`min-h-12 px-4 text-left text-base ${cantidad === unidades ? "bg-[#d4af37] text-[#1a1203]" : "border border-[rgba(212,175,55,0.35)] text-[#f6f1e7]"}`}
-                  onClick={() => setCantidad(unidades)}
-                >
-                  {unidades} perfumes · {formatCOP(precioUnitario(product, unidades))} cada uno
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              className={`mt-3 min-h-14 w-full px-4 text-left text-lg ${cantidad >= 12 ? "bg-[#d4af37] text-[#1a1203]" : "border border-[rgba(212,175,55,0.35)] text-[#f6f1e7]"}`}
+              onClick={() => setCantidad(12)}
+            >
+              12 perfumes, mejor precio: {formatCOP(reventa.compra)} cada uno
+            </button>
             {cantidad >= 12 && reventa.porUnidad > 0 ? (
               <p className="mt-3 text-base leading-6 text-[#e8d5a3]">
                 Si los vende a {formatCOP(reventa.venta)}, le quedan {formatCOP(reventa.porUnidad)} en cada uno.
@@ -119,6 +122,11 @@ export function ProductDetail({
             ) : null}
           </div>
           <div className="mt-6 grid gap-4">
+            {aviso ? (
+              <p className="border border-[rgba(212,175,55,0.35)] px-4 py-4 text-lg leading-7 text-[#f6f1e7]">
+                Listo. El mensaje ya está en WhatsApp. Solo tiene que enviarlo. Si no se abrió, toque el botón otra vez.
+              </p>
+            ) : null}
             {whatsapp ? (
               <button type="button" className="btn-facil" disabled={!product.disponible} onClick={comprarPorWhatsapp}>
                 {!product.disponible ? "Agotado" : `Lo quiero por WhatsApp · ${formatCOP(unitario * cantidad)}`}
