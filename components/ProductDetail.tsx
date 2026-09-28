@@ -34,13 +34,6 @@ export function ProductDetail({
   const promo = tienePromo(product);
   const baja = unitario < detalle;
 
-  function llevarDocena() {
-    if (!product.disponible) return;
-    setCantidad(12);
-    if (enPedido === 0 || enPedido >= 12) add(product.id, 12, product.nombre);
-    else add(product.id, 12 - enPedido, product.nombre);
-  }
-
   function comprarPorWhatsapp() {
     if (!product.disponible || !whatsapp) return;
     const text = mensajeCompra({
@@ -86,18 +79,15 @@ export function ProductDetail({
             Aroma equivalente. Fragancia inspirada, no es el producto original de la marca.
           </p>
           <div className="mt-6">
-            <p className="text-base tracking-[0.18em] text-[#e8d5a3] uppercase">Precio mayorista y al detal</p>
-            <p className="mt-1 text-xs tracking-[0.16em] text-[#d4af37] uppercase">Los mejores precios</p>
             {promo ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
             {baja ? <p className="text-sm text-[#f6f1e7]/45 line-through">{formatCOP(detalle)}</p> : null}
             <p className="font-serif text-4xl text-[#e8d5a3]">{formatCOP(unitario)}</p>
             <p className="mt-1 text-sm text-[#f6f1e7]/70">
-              por unidad · {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
+              {cantidad} {cantidad === 1 ? "unidad" : "unidades"} · {formatCOP(unitario * cantidad)}
             </p>
-            {baja ? <p className="mt-1 text-sm text-[#e8d5a3]">Ahorras {formatCOP(detalle - unitario)} en cada una.</p> : null}
             {reventa.porUnidad > 0 ? (
-              <p className="mt-3 border border-[rgba(212,175,55,0.35)] bg-[rgba(212,175,55,0.08)] px-4 py-3 text-sm leading-6 text-[#f6f1e7]">
-                12 unidades a {formatCOP(reventa.compra)}. Si las vendes a {formatCOP(reventa.venta)}, te quedan {formatCOP(reventa.porUnidad)} por cada una. En la docena, {formatCOP(reventa.docena)}.
+              <p className="mt-2 text-sm text-[#e8d5a3]">
+                12 und. a {formatCOP(reventa.compra)}. Si las vendes a {formatCOP(reventa.venta)}, te quedan {formatCOP(reventa.porUnidad)}.
               </p>
             ) : null}
           </div>
@@ -126,22 +116,7 @@ export function ProductDetail({
             ))}
           </div>
           <div className="mt-4 grid gap-3">
-            {whatsapp ? (
-              <button type="button" className="btn-gold w-full" disabled={!product.disponible} onClick={comprarPorWhatsapp}>
-                {!product.disponible
-                  ? "Agotado"
-                  : cantidad === 1
-                    ? `Comprar este por WhatsApp · ${formatCOP(detalle)}`
-                    : `Comprar ${cantidad} por WhatsApp · ${formatCOP(unitario * cantidad)}`}
-              </button>
-            ) : null}
-            {whatsapp ? (
-              <p className="text-sm leading-6 text-[#f6f1e7]/75">Se abre WhatsApp con el pedido listo. Solo lo envías.</p>
-            ) : null}
-            <button type="button" className="btn-ghost w-full" disabled={!product.disponible} onClick={llevarDocena}>
-              {!product.disponible ? "Agotado" : `Llevar 12 al pedido · ${formatCOP(reventa.compra)} cada una`}
-            </button>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="flex items-center border border-[rgba(212,175,55,0.35)]">
                 <button type="button" className="px-4 py-3" onClick={() => setCantidad((value) => Math.max(1, value - 1))} aria-label="Disminuir">
                   −
@@ -151,17 +126,20 @@ export function ProductDetail({
                   +
                 </button>
               </div>
-              {cantidad === 1 ? null : (
-                <button
-                  type="button"
-                  className="btn-ghost"
-                  disabled={!product.disponible}
-                  onClick={() => add(product.id, cantidad, product.nombre)}
-                >
-                  Sumar {cantidad} al pedido
-                </button>
-              )}
+              <button
+                type="button"
+                className="text-sm text-[#e8d5a3] underline disabled:opacity-40"
+                disabled={!product.disponible}
+                onClick={() => add(product.id, cantidad, product.nombre)}
+              >
+                Agregar al pedido
+              </button>
             </div>
+            {whatsapp ? (
+              <button type="button" className="btn-gold w-full" disabled={!product.disponible} onClick={comprarPorWhatsapp}>
+                {!product.disponible ? "Agotado" : `Comprar por WhatsApp · ${formatCOP(unitario * cantidad)}`}
+              </button>
+            ) : null}
             <ShareButton
               label="Compartir este perfume"
               title={product.nombre}

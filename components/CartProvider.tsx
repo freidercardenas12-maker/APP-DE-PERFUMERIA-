@@ -88,7 +88,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setToast({ id: Date.now(), nombre, total });
       },
       setCantidad: (id, cantidad) => {
-        const next = Math.max(1, Math.min(99, cantidad));
+        if (cantidad < 1) {
+          setLines((current) => current.filter((line) => line.id !== id));
+          return;
+        }
+        const next = Math.min(99, cantidad);
         setLines((current) => current.map((line) => (line.id === id ? { ...line, cantidad: next } : line)));
       },
       remove: (id) => setLines((current) => current.filter((line) => line.id !== id)),
