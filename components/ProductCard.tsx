@@ -4,11 +4,12 @@ import { perfilAroma } from "@/lib/aroma";
 import { Bottle } from "@/components/Bottle";
 import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
-import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo } from "@/lib/format";
+import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo, waLink } from "@/lib/format";
+import { mensajeCompra } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 
-export function ProductCard({ product }: { product: Producto }) {
+export function ProductCard({ product, whatsapp = "" }: { product: Producto; whatsapp?: string }) {
   const { add, lines, setCantidad } = useCart();
   const enPedido = lines.find((line) => line.id === product.id)?.cantidad ?? 0;
   const detalle = precioUnitario(product, 1);
@@ -25,6 +26,20 @@ export function ProductCard({ product }: { product: Producto }) {
     if (!product.disponible) return;
     if (enPedido === 0 || enPedido >= 12) add(product.id, 12, product.nombre);
     else setCantidad(product.id, 12);
+  }
+
+  function comprarUno() {
+    if (!product.disponible || !whatsapp) return;
+    const text = mensajeCompra({
+      nombre: product.nombre,
+      linea: CATEGORY_META[product.categoria].label,
+      talla: formatTalla(product.talla_ml),
+      aroma: perfilAroma(product).frase,
+      cantidad: 1,
+      unitario: detalle,
+      url: `${window.location.origin}/producto/${product.id}`,
+    });
+    window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -86,21 +101,32 @@ export function ProductCard({ product }: { product: Producto }) {
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          className="btn-gold w-full px-3 py-2 text-[0.68rem]"
-          disabled={!product.disponible}
-          onClick={llevarDocena}
-        >
-          {!product.disponible ? "Agotado" : `Llevar 12 · ${formatCOP(reventa.compra)}`}
-        </button>
+        {whatsapp ? (
+          <button
+            type="button"
+            className="btn-gold w-full px-3 py-2 text-[0.68rem]"
+            disabled={!product.disponible}
+            onClick={comprarUno}
+          >
+            {!product.disponible ? "Agotado" : "Comprar 1 por WhatsApp"}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn-gold w-full px-3 py-2 text-[0.68rem]"
+            disabled={!product.disponible}
+            onClick={() => add(product.id, 1, product.nombre)}
+          >
+            {!product.disponible ? "Agotado" : `Agregar 1 · ${formatCOP(detalle)}`}
+          </button>
+        )}
         <button
           type="button"
           className="btn-ghost w-full px-3 py-2 text-[0.68rem]"
           disabled={!product.disponible}
-          onClick={() => add(product.id, 1, product.nombre)}
+          onClick={llevarDocena}
         >
-          Agregar 1 · {formatCOP(detalle)}
+          {`Llevar 12 · ${formatCOP(reventa.compra)}`}
         </button>
       </div>
     </article>

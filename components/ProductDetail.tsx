@@ -7,7 +7,7 @@ import { useCart } from "@/components/CartProvider";
 import { CATEGORY_META } from "@/lib/categories";
 import { ShareButton } from "@/components/ShareButton";
 import { CANTIDADES_MAYOR, formatCOP, formatTalla, gananciaReventa, precioUnitario, tienePromo, waLink } from "@/lib/format";
-import { mensajeConsulta } from "@/lib/order";
+import { mensajeCompra } from "@/lib/order";
 import type { Producto } from "@/lib/types";
 import Link from "next/link";
 import { useState } from "react";
@@ -39,6 +39,20 @@ export function ProductDetail({
     setCantidad(12);
     if (enPedido === 0 || enPedido >= 12) add(product.id, 12, product.nombre);
     else add(product.id, 12 - enPedido, product.nombre);
+  }
+
+  function comprarPorWhatsapp() {
+    if (!product.disponible || !whatsapp) return;
+    const text = mensajeCompra({
+      nombre: product.nombre,
+      linea: meta.label,
+      talla: formatTalla(product.talla_ml),
+      aroma: perfilAroma(product).frase,
+      cantidad,
+      unitario,
+      url: window.location.href,
+    });
+    window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
   }
   const meta = CATEGORY_META[product.categoria];
 
@@ -112,8 +126,20 @@ export function ProductDetail({
             ))}
           </div>
           <div className="mt-4 grid gap-3">
-            <button type="button" className="btn-gold w-full" disabled={!product.disponible} onClick={llevarDocena}>
-              {!product.disponible ? "Agotado" : `Llevar 12 · ${formatCOP(reventa.compra)} cada una`}
+            {whatsapp ? (
+              <button type="button" className="btn-gold w-full" disabled={!product.disponible} onClick={comprarPorWhatsapp}>
+                {!product.disponible
+                  ? "Agotado"
+                  : cantidad === 1
+                    ? `Comprar este por WhatsApp · ${formatCOP(detalle)}`
+                    : `Comprar ${cantidad} por WhatsApp · ${formatCOP(unitario * cantidad)}`}
+              </button>
+            ) : null}
+            {whatsapp ? (
+              <p className="text-sm leading-6 text-[#f6f1e7]/75">Se abre WhatsApp con el pedido listo. Solo lo envías.</p>
+            ) : null}
+            <button type="button" className="btn-ghost w-full" disabled={!product.disponible} onClick={llevarDocena}>
+              {!product.disponible ? "Agotado" : `Llevar 12 al pedido · ${formatCOP(reventa.compra)} cada una`}
             </button>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center border border-[rgba(212,175,55,0.35)]">
@@ -125,41 +151,17 @@ export function ProductDetail({
                   +
                 </button>
               </div>
-              {cantidad === 12 ? null : (
+              {cantidad === 1 ? null : (
                 <button
                   type="button"
                   className="btn-ghost"
                   disabled={!product.disponible}
                   onClick={() => add(product.id, cantidad, product.nombre)}
                 >
-                  {cantidad === 1 ? `Agregar 1 · ${formatCOP(detalle)}` : `Agregar ${cantidad} · ${formatCOP(unitario)} c/u`}
+                  Sumar {cantidad} al pedido
                 </button>
               )}
             </div>
-            {whatsapp ? (
-              <button
-                type="button"
-                className="btn-ghost"
-                onClick={() => {
-                  const text = mensajeConsulta({
-                    nombre: product.nombre,
-                    linea: meta.label,
-                    talla: formatTalla(product.talla_ml),
-                    aroma: perfilAroma(product).frase,
-                    cantidad,
-                    unitario,
-                    url: window.location.href,
-                    reventa:
-                      reventa.porUnidad > 0
-                        ? `12 unidades a ${formatCOP(reventa.compra)}. Si las vendes a ${formatCOP(reventa.venta)}, te quedan ${formatCOP(reventa.porUnidad)} por cada una.`
-                        : undefined,
-                  });
-                  window.open(waLink(whatsapp, text), "_blank", "noopener,noreferrer");
-                }}
-              >
-                Preguntar por este por WhatsApp
-              </button>
-            ) : null}
             <ShareButton
               label="Compartir este perfume"
               title={product.nombre}
@@ -185,7 +187,7 @@ export function ProductDetail({
         <section className="mt-16">
           <h2 className="font-serif text-3xl">También te puede interesar</h2>
           <div className="mt-6">
-            <ProductGrid products={related} />
+            <ProductGrid products={related} whatsapp={whatsapp} />
           </div>
         </section>
       ) : null}

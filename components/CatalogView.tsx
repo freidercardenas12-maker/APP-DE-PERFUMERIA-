@@ -15,10 +15,12 @@ export function CatalogView({
   categoria,
   products,
   catalogo,
+  whatsapp = "",
 }: {
   categoria: Categoria;
   products: Producto[];
   catalogo: Producto[];
+  whatsapp?: string;
 }) {
   const meta = CATEGORY_META[categoria];
   const prices = products.map((product) => product.precio);
@@ -226,7 +228,7 @@ export function CatalogView({
               : "No hay una referencia con esas letras."}
           </p>
         ) : (
-          <ProductGrid products={shown} />
+          <ProductGrid products={shown} whatsapp={whatsapp} />
         )}
       </div>
       {visible < filtered.length ? (
@@ -243,7 +245,7 @@ export function CatalogView({
             La referencia no se queda solo en {meta.label.toLowerCase()}. Estas coinciden con lo que escribiste.
           </p>
           <div className="mt-6">
-            <ProductGrid products={otras} />
+            <ProductGrid products={otras} whatsapp={whatsapp} />
           </div>
         </section>
       ) : null}

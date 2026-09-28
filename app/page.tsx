@@ -104,14 +104,14 @@ export default async function HomePage() {
         <div className="mb-6 flex items-end justify-between gap-4">
           <h2 className="font-serif text-4xl">Destacados de la semana</h2>
         </div>
-        <ProductGrid products={destacados} />
+        <ProductGrid products={destacados} whatsapp={settings.whatsapp} />
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-4 px-4 py-12 md:grid-cols-3">
         {[
           ["01", "Elige", "Busca por nombre, a qué huele o para qué ocasión: cita, regalo, día o noche."],
           ["02", "Arma", "Suma cantidades del mismo perfume y baja el precio por unidad."],
-          ["03", "Envía", "Tus datos y la lista salen listos en un mensaje de WhatsApp."],
+          ["03", "Envía", "Un perfume se compra de una por WhatsApp. Si llevas varios, la lista sale en el mismo chat."],
         ].map(([step, title, text]) => (
           <article key={step} className="border border-[rgba(212,175,55,0.18)] p-6">
             <p className="text-xs tracking-[0.2em] text-[#d4af37]">{step}</p>

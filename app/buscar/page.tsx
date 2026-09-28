@@ -1,5 +1,5 @@
 import { SearchResults } from "@/components/SearchResults";
-import { getProducts } from "@/lib/store";
+import { getProducts, getSettings } from "@/lib/store";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,6 +13,6 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q = "" } = await searchParams;
-  const products = await getProducts();
-  return <SearchResults products={products} initialQuery={q} />;
+  const [products, settings] = await Promise.all([getProducts(), getSettings()]);
+  return <SearchResults products={products} initialQuery={q} whatsapp={settings.whatsapp} />;
 }

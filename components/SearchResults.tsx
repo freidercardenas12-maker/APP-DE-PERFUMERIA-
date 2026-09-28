@@ -6,7 +6,15 @@ import { buscarPerfumes } from "@/lib/search";
 import type { Producto } from "@/lib/types";
 import { useMemo, useState } from "react";
 
-export function SearchResults({ products, initialQuery }: { products: Producto[]; initialQuery: string }) {
+export function SearchResults({
+  products,
+  initialQuery,
+  whatsapp = "",
+}: {
+  products: Producto[];
+  initialQuery: string;
+  whatsapp?: string;
+}) {
   const [query, setQuery] = useState(initialQuery);
   const matches = useMemo(() => buscarPerfumes(products, query), [products, query]);
 
@@ -27,7 +35,7 @@ export function SearchResults({ products, initialQuery }: { products: Producto[]
           ? `${matches.length} ${matches.length === 1 ? "resultado" : "resultados"} para “${query.trim()}”`
           : "Escribe una letra y aparecen dama, caballero y árabe."}
       </p>
-      <div className="mt-6">{query.trim() ? <ProductGrid products={matches.slice(0, 48)} /> : null}</div>
+      <div className="mt-6">{query.trim() ? <ProductGrid products={matches.slice(0, 48)} whatsapp={whatsapp} /> : null}</div>
     </div>
   );
 }

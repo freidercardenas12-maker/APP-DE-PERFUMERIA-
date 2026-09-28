@@ -2,7 +2,7 @@ import { CATEGORY_META } from "@/lib/categories";
 import { formatCOP, formatTalla, precioUnitario } from "@/lib/format";
 import type { ClientePedido, Producto } from "@/lib/types";
 
-export function mensajeConsulta(input: {
+export function mensajeCompra(input: {
   nombre: string;
   linea: string;
   talla: string;
@@ -10,23 +10,21 @@ export function mensajeConsulta(input: {
   cantidad: number;
   unitario: number;
   url: string;
-  reventa?: string;
 }): string {
+  const cantidadTexto = input.cantidad === 1 ? "Quiero 1 unidad." : `Quiero ${input.cantidad} unidades.`;
   return [
-    "Hola! Quiero información de este perfume.",
+    "Hola! Quiero comprar este perfume.",
     "",
     `*${input.nombre}*`,
     `${input.linea} · ${input.talla}`,
     input.aroma,
-    `Cantidad: ${input.cantidad}`,
-    `Precio por unidad: ${formatCOP(input.unitario)}`,
+    cantidadTexto,
+    `Precio: ${formatCOP(input.unitario)} cada una`,
     `Total: ${formatCOP(input.unitario * input.cantidad)}`,
-    input.reventa ?? "",
     "",
+    "Me confirmas y lo dejo apartado.",
     input.url,
-  ]
-    .filter((line, index, lines) => line !== "" || lines[index - 1] !== "")
-    .join("\n");
+  ].join("\n");
 }
 
 export function mensajePedido(
