@@ -1,6 +1,5 @@
 import { PedidoSeis } from "@/components/PedidoSeis";
 import { ProductGrid } from "@/components/ProductGrid";
-import { ShareButton } from "@/components/ShareButton";
 import { CATEGORY_META } from "@/lib/categories";
 import { getProducts, getSettings } from "@/lib/store";
 import { CATEGORIAS, type Producto } from "@/lib/types";
@@ -37,29 +36,22 @@ export default async function HomePage() {
               </p>
             ) : null}
             <h1 className="mt-5 max-w-xl font-serif text-5xl leading-[0.95] text-[#f6f1e7] md:text-7xl">
-              Elige, arma el pedido y envíalo por WhatsApp.
+              Escoja el perfume y escríbanos por WhatsApp.
             </h1>
             {settings.promoSubtitulo ? (
               <p className="mt-4 max-w-lg font-serif text-2xl leading-snug text-[#e8d5a3]">{settings.promoSubtitulo}</p>
             ) : null}
-            <p className="mt-6 max-w-lg text-base leading-7 text-[#f6f1e7]/75">
-              Al por mayor y al detal, con los mejores precios. Dama, caballero y árabe / nicho. Busca por nombre, a qué huele o para qué ocasión, suma cantidades y el total sale listo en el mensaje.
-            </p>
+            <p className="mt-6 max-w-lg text-lg leading-8 text-[#f6f1e7]/75">Toque el que le guste. El mensaje sale listo. Solo lo envía.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/catalogo/dama" className="btn-gold">
-                Ver catálogo dama
+                Para ella
               </Link>
               <Link href="/catalogo/caballero" className="btn-ghost">
-                Caballero
+                Para él
               </Link>
               <Link href="/catalogo/arabe" className="btn-ghost">
-                Árabe / nicho
+                Árabes
               </Link>
-              <ShareButton
-                label="Compartir catálogo"
-                title="Aura & Essentia"
-                text="Perfumes al por mayor y al detal. Los mejores precios."
-              />
               {settings.instagram ? (
                 <a href={settings.instagram} target="_blank" rel="noreferrer" className="btn-ghost">
                   Instagram
@@ -105,20 +97,6 @@ export default async function HomePage() {
           <h2 className="font-serif text-4xl">Destacados de la semana</h2>
         </div>
         <ProductGrid products={destacados} whatsapp={settings.whatsapp} />
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-4 px-4 py-12 md:grid-cols-3">
-        {[
-          ["01", "Elige", "Busca por nombre, a qué huele o para qué ocasión: cita, regalo, día o noche."],
-          ["02", "Arma", "Suma cantidades del mismo perfume y baja el precio por unidad."],
-          ["03", "Envía", "Un perfume se compra de una por WhatsApp. Si llevas varios, la lista sale en el mismo chat."],
-        ].map(([step, title, text]) => (
-          <article key={step} className="border border-[rgba(212,175,55,0.18)] p-6">
-            <p className="text-xs tracking-[0.2em] text-[#d4af37]">{step}</p>
-            <h3 className="mt-3 font-serif text-3xl">{title}</h3>
-            <p className="mt-2 text-sm leading-6 text-[#f6f1e7]/70">{text}</p>
-          </article>
-        ))}
       </section>
     </div>
   );

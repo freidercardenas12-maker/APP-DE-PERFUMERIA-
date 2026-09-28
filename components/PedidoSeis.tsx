@@ -13,10 +13,8 @@ export function PedidoSeis({ products }: { products: Producto[] }) {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-12">
-      <h2 className="font-serif text-4xl">Un pedido de seis</h2>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#f6f1e7]/75">
-        Dos de dama, dos de caballero y dos árabes, una unidad de cada uno. Si llevas 6 o 12 del mismo perfume, el precio por unidad baja.
-      </p>
+      <h2 className="font-serif text-4xl">Seis para empezar</h2>
+      <p className="mt-2 max-w-2xl text-lg leading-7 text-[#f6f1e7]/75">Dos para ella, dos para él y dos árabes. Un toque y quedan en su lista.</p>
       <ul className="mt-6 divide-y divide-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.2)]">
         {products.map((product) => (
           <li key={product.id} className="flex items-center justify-between gap-3 px-4 py-3">
@@ -44,7 +42,7 @@ export function PedidoSeis({ products }: { products: Producto[] }) {
             )
           }
         >
-          Agregar los seis
+          Poner estos seis en mi lista
         </button>
       </div>
     </section>

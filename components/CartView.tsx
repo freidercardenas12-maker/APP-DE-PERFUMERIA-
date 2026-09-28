@@ -71,12 +71,11 @@ export function CartView({ products, settings }: { products: Producto[]; setting
   if (listo) {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
-        <p className="text-xs tracking-[0.22em] text-[#d4af37] uppercase">Pedido enviado</p>
         <h1 className="mt-3 font-serif text-5xl">Listo</h1>
-        <p className="mt-4 max-w-sm text-sm leading-6 text-[#f6f1e7]/75">
-          El total fue {formatCOP(listo.total)}. El mensaje ya está en WhatsApp. Si no se abrió, ábrelo aquí. El pedido quedó vacío para la siguiente compra.
+        <p className="mt-4 max-w-sm text-lg leading-7 text-[#f6f1e7]/75">
+          El total es {formatCOP(listo.total)}. Solo tiene que enviar el mensaje de WhatsApp. Si no se abrió, toque el botón.
         </p>
-        <a href={listo.href} target="_blank" rel="noreferrer" className="btn-gold mt-8">
+        <a href={listo.href} target="_blank" rel="noreferrer" className="btn-facil mt-8">
           Abrir WhatsApp
         </a>
         <Link href="/catalogo/dama" className="btn-ghost mt-3">
@@ -88,16 +87,16 @@ export function CartView({ products, settings }: { products: Producto[]; setting
 
   return (
     <div className="mx-auto max-w-lg px-4 py-8">
-      <h1 className="font-serif text-4xl">Tu pedido</h1>
+      <h1 className="font-serif text-4xl">Su lista</h1>
       <p className="mt-2 text-sm leading-6 text-[#f6f1e7]/65">{settings.entrega}</p>
 
       {!ready ? <p className="mt-8 text-sm text-[#e8d5a3]">Cargando pedido…</p> : null}
 
       {ready && lines.length === 0 ? (
         <div className="mt-8 border border-dashed border-[rgba(212,175,55,0.35)] px-6 py-16 text-center">
-          <p>Tu pedido está vacío.</p>
+          <p className="text-lg">Todavía no tiene perfumes en la lista.</p>
           <Link href="/catalogo/dama" className="btn-gold mt-6">
-            Ver catálogo
+            Ver perfumes
           </Link>
         </div>
       ) : null}
@@ -137,14 +136,14 @@ export function CartView({ products, settings }: { products: Producto[]; setting
                     </div>
                     <div className="text-right">
                       <p className="text-[#e8d5a3]">{formatCOP(row.unitario * row.cantidad)}</p>
-                      {row.unitario < row.base ? <p className="text-xs text-[#f6f1e7]/60">{formatCOP(row.unitario)} c/u</p> : null}
+                      {row.unitario < row.base ? <p className="text-sm text-[#f6f1e7]/60">{formatCOP(row.unitario)} cada uno</p> : null}
                     </div>
                   </div>
                 </li>
               ),
             )}
           </ul>
-          <p className="mt-3 text-sm text-[#f6f1e7]/60">Desde 12 unidades del mismo perfume baja el precio.</p>
+          <p className="mt-3 text-base text-[#f6f1e7]/70">Si lleva 12 del mismo perfume, cada uno sale más barato.</p>
           <p className="mt-4 text-right font-serif text-3xl text-[#e8d5a3]">{formatCOP(total)}</p>
 
           <form
@@ -154,38 +153,40 @@ export function CartView({ products, settings }: { products: Producto[]; setting
               enviar();
             }}
           >
-            <label className="text-sm text-[#e8d5a3]">
-              Nombre
-              <input required autoComplete="name" value={cliente.nombre} onChange={(event) => setCliente({ ...cliente, nombre: event.target.value })} className="field mt-2" />
+            <label className="text-base text-[#e8d5a3]">
+              Su nombre
+              <input required autoComplete="name" placeholder="María Gómez" value={cliente.nombre} onChange={(event) => setCliente({ ...cliente, nombre: event.target.value })} className="field mt-2" />
             </label>
-            <label className="text-sm text-[#e8d5a3]">
-              Ciudad
+            <label className="text-base text-[#e8d5a3]">
+              Su ciudad
               <input
                 required
                 autoComplete="address-level2"
+                placeholder="Bogotá"
                 value={cliente.ciudad}
                 onChange={(event) => setCliente({ ...cliente, ciudad: event.target.value })}
                 className="field mt-2"
               />
             </label>
-            <label className="text-sm text-[#e8d5a3]">
-              Teléfono
+            <label className="text-base text-[#e8d5a3]">
+              Su celular
               <input
                 required
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
+                placeholder="300 123 4567"
                 value={cliente.telefono}
                 onChange={(event) => setCliente({ ...cliente, telefono: event.target.value })}
                 className="field mt-2"
               />
             </label>
-            {error ? <p className="text-sm text-red-300">{error}</p> : null}
-            <button type="submit" className="btn-gold w-full">
-              Enviar pedido · {formatCOP(total)}
+            {error ? <p className="text-base text-red-300">{error}</p> : null}
+            <button type="submit" className="btn-facil">
+              Enviar por WhatsApp · {formatCOP(total)}
             </button>
-            <button type="button" className="text-sm text-[#f6f1e7]/60 underline" onClick={clear}>
-              Vaciar pedido
+            <button type="button" className="text-base text-[#f6f1e7]/60 underline" onClick={clear}>
+              Borrar la lista
             </button>
             <p className="text-center text-sm leading-6 text-[#f6f1e7]/60">{settings.pago}</p>
           </form>

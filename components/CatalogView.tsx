@@ -107,7 +107,7 @@ export function CatalogView({
           <p className="mt-2 text-sm tracking-[0.12em] text-[#d4af37] uppercase">
             Mayorista y al detal · Los mejores precios
           </p>
-          <p className="mt-2 text-sm text-[#e8d5a3]">Desde 3 unidades baja el precio. Desde 12, el mejor precio por unidad.</p>
+          <p className="mt-2 text-base text-[#e8d5a3]">Si lleva 3, 6 o 12, cada uno sale más barato.</p>
         </div>
         <p className="text-sm text-[#e8d5a3]">
           {filtered.length} {filtered.length === 1 ? "referencia" : "referencias"}

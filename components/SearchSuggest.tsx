@@ -11,7 +11,7 @@ export function SearchSuggest({
   catalogo,
   value,
   onChange,
-  placeholder = "Escribe cualquier letra",
+  placeholder = "Escriba el nombre del perfume",
   inputClassName = "field",
 }: {
   catalogo: Buscable[];

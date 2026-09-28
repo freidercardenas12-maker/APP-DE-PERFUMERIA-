@@ -108,15 +108,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           role="status"
           className="toast-in fixed top-[4.75rem] left-1/2 z-[80] w-[min(92vw,440px)] -translate-x-1/2 border-2 border-[#d4af37] bg-[#120e09] px-4 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.65)]"
         >
-          <p className="text-xs tracking-[0.2em] text-[#d4af37] uppercase">Agregado al pedido</p>
+          <p className="text-base text-[#d4af37]">Quedó en su lista</p>
           <p className="mt-1 font-serif text-2xl leading-tight text-[#f6f1e7]">{toast.nombre}</p>
           <div className="mt-3 flex items-center justify-between gap-3">
             <p className="text-sm text-[#e8d5a3]">
-              Llevas <span className="font-semibold text-[#f3e0a8]">{toast.total}</span>{" "}
+              Lleva <span className="font-semibold text-[#f3e0a8]">{toast.total}</span>{" "}
               {toast.total === 1 ? "perfume" : "perfumes"}
             </p>
             <Link href="/carrito" className="btn-gold shrink-0 px-3 py-2 text-[0.68rem]">
-              Ver pedido
+              Ver mi lista
             </Link>
           </div>
         </div>

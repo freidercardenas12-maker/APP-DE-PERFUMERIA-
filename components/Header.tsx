@@ -65,7 +65,7 @@ export function Header({ catalogo }: { catalogo: Buscable[] }) {
           suppressHydrationWarning
           className="ml-auto flex items-center gap-2 text-[0.75rem] tracking-[0.14em] uppercase md:ml-0"
         >
-          <span>Carrito</span>
+          <span>Mi lista</span>
           <span
             className={`grid h-8 min-w-8 place-items-center px-1.5 font-semibold ${pop ? "cart-pop" : ""} ${
               ready && count > 0 ? "bg-[#d4af37] text-[#1a1203]" : "border border-[#d4af37] text-[#d4af37]"
@@ -102,9 +102,9 @@ export function Header({ catalogo }: { catalogo: Buscable[] }) {
     {ready && count > 0 && pathname !== "/carrito" ? (
       <Link
         href="/carrito"
-        className="fixed bottom-4 left-4 z-40 border border-[#d4af37] bg-[#121212] px-4 py-3 text-xs tracking-[0.14em] text-[#e8d5a3] uppercase shadow-lg md:hidden"
+        className="fixed bottom-4 left-4 z-40 border border-[#d4af37] bg-[#121212] px-5 py-4 text-base text-[#f6f1e7] shadow-lg md:hidden"
       >
-        Ver pedido · {count} {count === 1 ? "perfume" : "perfumes"}
+        Ver mi lista · {count} {count === 1 ? "perfume" : "perfumes"}
       </Link>
     ) : null}
     </>

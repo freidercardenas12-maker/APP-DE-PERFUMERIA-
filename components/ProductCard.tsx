@@ -69,21 +69,17 @@ export function ProductCard({ product, whatsapp = "" }: { product: Producto; wha
         <div>
           {promo ? <p className="text-xs text-[#f6f1e7]/45 line-through">{formatCOP(product.precio)}</p> : null}
           <p className="text-lg text-[#e8d5a3]">{formatCOP(detalle)}</p>
-          <p className="text-[0.68rem] text-[#f6f1e7]/70">12 und. {formatCOP(reventa.compra)}</p>
+          <p className="text-sm text-[#f6f1e7]/70">12 perfumes: {formatCOP(reventa.compra)} cada uno</p>
         </div>
         {whatsapp ? (
-          <button type="button" className="btn-gold w-full px-3 py-2 text-[0.68rem]" disabled={!product.disponible} onClick={comprarUno}>
-            {!product.disponible ? "Agotado" : "Comprar por WhatsApp"}
+          <button type="button" className="btn-facil" disabled={!product.disponible} onClick={comprarUno}>
+            {!product.disponible ? "Agotado" : "Lo quiero por WhatsApp"}
           </button>
-        ) : null}
-        <button
-          type="button"
-          className="text-xs tracking-[0.08em] text-[#e8d5a3] uppercase underline disabled:opacity-40"
-          disabled={!product.disponible}
-          onClick={() => add(product.id, 1, product.nombre)}
-        >
-          Agregar al pedido
-        </button>
+        ) : (
+          <button type="button" className="btn-facil" disabled={!product.disponible} onClick={() => add(product.id, 1, product.nombre)}>
+            {!product.disponible ? "Agotado" : "Lo quiero"}
+          </button>
+        )}
       </div>
     </article>
   );
